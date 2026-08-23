@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بيانات وتفاصيل الصف الدراسي - GradeDetailsPanel</title>
+  
+  <!-- Apple SF Arabic WebFont CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mrbubbles/sf-arabic-font@master/SF-Arabic.css">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
+
+  <style>
+    /* Global Reset & Typography */
+    *, body, html {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      direction: rtl;
+    }
+
+    /* ===== GRADE DETAILS PANEL CONTAINER ===== */
+    .panel-container {
+      width: 100%;
+      max-width: 1040px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Top Navigation & Actions Bar */
+    .top-nav-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .top-right-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .back-nav-btn {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      transition: all 0.18s ease;
+      outline: none;
+      user-select: none;
+    }
+
+    .back-nav-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: translateX(2px);
+    }
+
+    .top-page-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .top-page-sub {
+      font-size: 12.5px;
+      color: #64748b;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Top Action Buttons */
+    .top-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary-indigo {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .btn-primary-indigo:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-secondary-outline {
+      background: #ffffff;
+      color: #4f46e5;
+      border: 1px solid #c7d2fe;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .btn-secondary-outline:hover {
+      background: #eef2ff;
+      border-color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+
+    /* Grade Hero Banner */
+    .grade-hero-banner {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 20px;
+    }
+
+    .grade-main-name {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .grade-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13.5px;
+      color: #475569;
+      font-weight: 700;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-item svg {
+      color: #4f46e5;
+    }
+
+    /* Middle 2-Column Grid */
+    .middle-two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .section-card-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 380px;
+    }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title-text {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-small-add {
+      background: #ffffff;
+      color: #4f46e5;
+      border: 1px solid #c7d2fe;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .btn-small-add:hover {
+      background: #eef2ff;
+      border-color: #a5b4fc;
+    }
+
+    /* Section Badges Row */
+    .sections-badges-grid {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sec-badge-pill {
+      background: #eef2ff;
+      color: #4338ca;
+      border: 1px solid #e0e7ff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 8px 18px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .sec-badge-pill:hover {
+      background: #4338ca;
+      color: #ffffff;
+      border-color: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+    }
+
+    /* Subjects Table */
+    .subjects-table-wrapper {
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: right;
+    }
+
+    .mini-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 12.5px;
+      font-weight: 800;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .mini-table td {
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    .mini-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .subject-name-flex {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+    }
+
+    .subject-name-flex svg {
+      color: #4f46e5;
+    }
+
+    .btn-delete-pill {
+      background: #ffffff;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+      padding: 5px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-delete-pill:hover {
+      background: #fff1f2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+
+    /* Bottom Enrolled Students Section */
+    .students-card-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .students-table-wrapper {
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+
+    .students-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: right;
+    }
+
+    .students-table th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 12.5px;
+      font-weight: 800;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .students-table td {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    .students-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .student-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+    }
+
+    .student-name-cell svg {
+      color: #4f46e5;
+    }
+
+    .section-pill-tag {
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .table-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action-outline {
+      background: #ffffff;
+      color: #4f46e5;
+      border: 1px solid #c7d2fe;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .btn-action-outline:hover {
+      background: #eef2ff;
+      border-color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+
+    .btn-action-danger {
+      background: #ffffff;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+    }
+
+    .btn-action-danger:hover {
+      background: #fff1f2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+
+    @media (max-width: 768px) {
+      .middle-two-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GradeDetailsPanel Container -->
+  <div class="panel-container">
+    
+    <!-- Top Navigation & Actions Bar -->
+    <div class="top-nav-row">
+      <div class="top-right-group">
+        <button class="back-nav-btn" onclick="alert('العودة لصفحة الفصول الدراسية')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>العودة لصفحة الفصول الدراسية</span>
+        </button>
+
+        <h2 class="top-page-title">
+          <span>بيانات وتفاصيل: الصف الخامس</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+        </h2>
+        <p class="top-page-sub">المستوى الدراسي: 5 • إجمالي 3 شعب، 6 مواد، 2 طلاب</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="top-actions-group">
+        <button class="btn-secondary-outline" onclick="alert('إضافة مادة جديدة')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>إضافة مادة</span>
+        </button>
+
+        <button class="btn-primary-indigo" onclick="alert('إضافة شعبة جديدة')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>إضافة شعبة</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Grade Hero Banner -->
+    <div class="grade-hero-banner">
+      <h1 class="grade-main-name">الصف الخامس</h1>
+      <div class="grade-meta-row">
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+          <span>المستوى 5</span>
+        </span>
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+          <span>3 شعب دراسية</span>
+        </span>
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>6 مواد مقررة</span>
+        </span>
+        <span class="meta-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>2 طالب مقيد</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Middle 2-Column Section -->
+    <div class="middle-two-columns">
+      
+      <!-- Right Card: Created Sections & Rooms -->
+      <div class="section-card-box">
+        <div class="card-header-flex">
+          <h3 class="card-title-text">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+            <span>الشعب والقاعات الدراسية المنشأة</span>
+          </h3>
+
+          <button class="btn-small-add" onclick="alert('إضافة شعبة جديد')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>إضافة شعبة</span>
+          </button>
+        </div>
+
+        <div class="sections-badges-grid">
+          <button class="sec-badge-pill" onclick="alert('جدول وتفاصيل الشعبة 5أ')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+            <span>الشعبة 5أ</span>
+          </button>
+
+          <button class="sec-badge-pill" onclick="alert('جدول وتفاصيل الشعبة 5ب')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+            <span>الشعبة 5ب</span>
+          </button>
+
+          <button class="sec-badge-pill" onclick="alert('جدول وتفاصيل الشعبة 5ج')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+            <span>الشعبة 5ج</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Left Card: Assigned Subjects -->
+      <div class="section-card-box">
+        <div class="card-header-flex">
+          <h3 class="card-title-text">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>المواد الدراسية المقررة</span>
+          </h3>
+
+          <button class="btn-small-add" onclick="alert('إضافة مادة جديد')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>إضافة مادة</span>
+          </button>
+        </div>
+
+        <div class="subjects-table-wrapper">
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>اسم المادة</th>
+                <th style="width: 100px;">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>التربية الإسلامية</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة التربية الإسلامية؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>الرياضيات</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة الرياضيات؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>العلوم</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة العلوم؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>العلوم العامة</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة العلوم العامة؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>اللغة الإنجليزية</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة اللغة الإنجليزية؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="subject-name-flex">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>اللغة العربية</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn-delete-pill" onclick="if(confirm('هل أنت تأكد من حذف مادة اللغة العربية؟')) alert('تم حذف المادة بنجاح')">حذف المادة</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Enrolled Students Section -->
+    <div class="students-card-box">
+      <div class="card-header-flex">
+        <h3 class="card-title-text">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+          <span>سجل الطلاب المقيدين بـ الصف الخامس (إجمالي 2)</span>
+        </h3>
+
+        <button class="btn-primary-indigo" style="padding: 8px 16px; font-size: 12.5px;" onclick="alert('إضافة طالب جديد')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>إضافة طالب</span>
+        </button>
+      </div>
+
+      <div class="students-table-wrapper">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th>رقم الجلوس</th>
+              <th>كود الطالب</th>
+              <th>اسم الطالب</th>
+              <th>الشعبة</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1001</strong></td>
+              <td><code>ST1001</code></td>
+              <td>
+                <div class="student-name-cell">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+                  <span>أحمد خالد</span>
+                </div>
+              </td>
+              <td><span class="section-pill-tag">أ5</span></td>
+              <td>
+                <div class="table-actions-row">
+                  <button class="btn-action-outline" onclick="alert('نقل الطالب أحمد خالد')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    <span>نقل</span>
+                  </button>
+
+                  <button class="btn-action-outline" onclick="alert('تعديل الطالب أحمد خالد')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <span>تعديل</span>
+                  </button>
+
+                  <button class="btn-action-danger" onclick="if(confirm('هل أنت تأكد من حذف الطالب أحمد خالد؟')) alert('تم حذف الطالب بنجاح')">
+                    <span>حذف</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td><strong>5001</strong></td>
+              <td><code>5001</code></td>
+              <td>
+                <div class="student-name-cell">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+                  <span>مسعود ما طقطق</span>
+                </div>
+              </td>
+              <td><span class="section-pill-tag">ج5</span></td>
+              <td>
+                <div class="table-actions-row">
+                  <button class="btn-action-outline" onclick="alert('نقل الطالب مسعود ما طقطق')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    <span>نقل</span>
+                  </button>
+
+                  <button class="btn-action-outline" onclick="alert('تعديل الطالب مسعود ما طقطق')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <span>تعديل</span>
+                  </button>
+
+                  <button class="btn-action-danger" onclick="if(confirm('هل أنت تأكد من حذف الطالب مسعود ما طقطق؟')) alert('تم حذف الطالب بنجاح')">
+                    <span>حذف</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

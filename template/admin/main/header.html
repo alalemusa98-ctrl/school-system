@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم الإدارية - الهيدر الرئيسي</title>
+  <!-- Google Fonts: Tajawal & Readex Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Global Reset & Typography */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f8fafc;
+      font-family: 'Tajawal', 'Readex Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #0f172a;
+      direction: rtl;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== 1. EXECUTIVE TOP HEADER BAR ===== */
+    .saas-executive-header {
+      background: #ffffff;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 20px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
+    }
+
+    /* Right: Brand Logo & Title */
+    .header-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .brand-sq-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    }
+
+    .brand-title-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-main-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .brand-sub-title {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Center: Search Input Bar */
+    .header-center-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      border: 1px solid transparent;
+      padding: 8px 18px;
+      border-radius: 40px;
+      width: 100%;
+      max-width: 420px;
+      transition: all 0.2s ease;
+    }
+
+    .header-center-search:focus-within {
+      background: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .search-glass-svg {
+      flex-shrink: 0;
+    }
+
+    .saas-search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: 12.5px;
+      color: #0f172a;
+      width: 100%;
+    }
+
+    .saas-search-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* Left: Action Controls & User Profile */
+    .header-left-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .notif-bell-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .notif-bell-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .notif-dot-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 800;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+    }
+
+    /* User Profile Pill Dropdown */
+    .user-profile-dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .user-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 6px 14px 6px 10px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .user-profile-pill:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-info-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    .user-display-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .user-display-role {
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .dropdown-caret-icon {
+      color: #64748b;
+      transition: transform 0.2s ease;
+    }
+
+    .dropdown-caret-icon.open {
+      transform: rotate(180deg);
+    }
+
+    /* Floating macOS Menu Dropdown */
+    .mac-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 1000;
+      width: 240px;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
+      padding: 6px;
+      backdrop-filter: blur(16px);
+      display: none;
+      opacity: 0;
+      transform: scale(0.95) translateY(-6px);
+      transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mac-dropdown-menu.show {
+      display: block;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    .mac-dropdown-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+    }
+
+    .mac-header-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #eef2ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mac-header-info {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    .mac-user-name {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .mac-user-email {
+      font-size: 10.5px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .mac-dropdown-divider {
+      height: 1px;
+      background: #f1f5f9;
+      margin: 4px 0;
+    }
+
+    .mac-dropdown-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mac-dropdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #334155;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: right;
+    }
+
+    .mac-dropdown-item .item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mac-dropdown-item .item-svg-icon {
+      flex-shrink: 0;
+      color: #64748b;
+      transition: color 0.15s ease;
+    }
+
+    .mac-dropdown-item:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .mac-dropdown-item:hover .item-svg-icon {
+      color: #0f172a;
+    }
+
+    .mac-dropdown-item.danger {
+      color: #e11d48;
+    }
+
+    .mac-dropdown-item.danger .item-svg-icon {
+      color: #e11d48;
+    }
+
+    .mac-dropdown-item.danger:hover {
+      background: #fff1f2;
+      color: #be123c;
+    }
+
+    .mac-dropdown-item .item-shortcut {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== 2. MINIMAL HORIZONTAL NAVBAR ===== */
+    .saas-horizontal-navbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 32px;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-links-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 1440px;
+      margin: 0 auto;
+      flex-wrap: nowrap;
+    }
+
+    .saas-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #64748b;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      text-decoration: none;
+    }
+
+    .nav-svg-icon {
+      flex-shrink: 0;
+      color: #64748b;
+      transition: color 0.18s ease, transform 0.18s ease;
+    }
+
+    .saas-nav-link:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    .saas-nav-link:hover .nav-svg-icon {
+      color: #1e293b;
+      transform: translateY(-1px);
+    }
+
+    .saas-nav-link.active {
+      background: #eef2ff;
+      color: #4f46e5;
+      font-weight: 700;
+      border-color: rgba(99, 102, 241, 0.18);
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+    }
+
+    .saas-nav-link.active .nav-svg-icon {
+      color: #4f46e5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SaaS Executive Top Header -->
+  <header class="saas-executive-header">
+    <!-- Right: Brand Logo & Title -->
+    <div class="header-brand-group">
+      <div class="brand-sq-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+        </svg>
+      </div>
+      <div class="brand-title-box">
+        <h1 class="brand-main-title">منظومة إدارة المدرسة</h1>
+        <span class="brand-sub-title">لوحة التحكم الإدارية الشاملة</span>
+      </div>
+    </div>
+
+    <!-- Center: Soft Search Input Bar -->
+    <div class="header-center-search">
+      <svg class="search-glass-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input type="text" placeholder="بحث سريع عن طالب، معلم، أو مادة..." class="saas-search-input" />
+    </div>
+
+    <!-- Left: Notifications Bell & User Profile Pill -->
+    <div class="header-left-actions">
+      <button class="notif-bell-btn" title="التنبيهات">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+        <span class="notif-dot-badge">3</span>
+      </button>
+
+      <!-- User Profile Pill with macOS Style Floating Dropdown -->
+      <div class="user-profile-dropdown-container">
+        <button id="profilePillBtn" class="user-profile-pill">
+          <div class="user-avatar-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <div class="user-info-meta">
+            <span class="user-display-name">مدير المنظومة</span>
+            <span class="user-display-role">المدير العام</span>
+          </div>
+          <svg id="profileCaret" class="dropdown-caret-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+
+        <!-- macOS / Apple Style Floating Menu Dropdown -->
+        <div id="profileMenu" class="mac-dropdown-menu">
+          <!-- Menu Header / User Summary -->
+          <div class="mac-dropdown-header">
+            <div class="mac-header-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div class="mac-header-info">
+              <span class="mac-user-name">مدير المنظومة</span>
+              <span class="mac-user-email">admin@school.edu.sa</span>
+            </div>
+          </div>
+
+          <div class="mac-dropdown-divider"></div>
+
+          <!-- Menu Items Group 1 -->
+          <div class="mac-dropdown-group">
+            <button class="mac-dropdown-item">
+              <div class="item-left">
+                <svg class="item-svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                  <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+                <span>اللوحة التفاعلية</span>
+              </div>
+              <span class="item-shortcut">⌘1</span>
+            </button>
+
+            <button class="mac-dropdown-item">
+              <div class="item-left">
+                <svg class="item-svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                  <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                </svg>
+                <span>الفصول والقاعات</span>
+              </div>
+              <span class="item-shortcut">⌘2</span>
+            </button>
+
+            <button class="mac-dropdown-item">
+              <div class="item-left">
+                <svg class="item-svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>الجدول الدراسي</span>
+              </div>
+              <span class="item-shortcut">⌘3</span>
+            </button>
+          </div>
+
+          <div class="mac-dropdown-divider"></div>
+
+          <!-- Menu Items Group 2 -->
+          <div class="mac-dropdown-group">
+            <button class="mac-dropdown-item">
+              <div class="item-left">
+                <svg class="item-svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+                <span>تحديث البيانات الحية</span>
+              </div>
+              <span class="item-shortcut">⌘R</span>
+            </button>
+          </div>
+
+          <div class="mac-dropdown-divider"></div>
+
+          <!-- Menu Items Group 3: Danger/Logout -->
+          <div class="mac-dropdown-group">
+            <button class="mac-dropdown-item danger">
+              <div class="item-left">
+                <svg class="item-svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                <span>تسجيل الخروج</span>
+              </div>
+              <span class="item-shortcut">⌥⌘Q</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SaaS Minimal Horizontal Navigation Bar -->
+  <nav class="saas-horizontal-navbar">
+    <div class="nav-links-wrapper">
+      <button class="saas-nav-link active">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+        <span>الرئيسية</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span>الطلاب</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>المعلمون</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+        </svg>
+        <span>الفصول</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+        <span>المواد الدراسية</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>الجدول الدراسي</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+        </svg>
+        <span>الواجبات</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span>الامتحانات</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>التقارير</span>
+      </button>
+
+      <button class="saas-nav-link">
+        <svg class="nav-svg-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>الإعدادات</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Interactive JavaScript for Profile Dropdown & Nav Tabs -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const profilePillBtn = document.getElementById('profilePillBtn');
+      const profileMenu = document.getElementById('profileMenu');
+      const profileCaret = document.getElementById('profileCaret');
+      const navLinks = document.querySelectorAll('.saas-nav-link');
+
+      // Toggle Profile Dropdown
+      profilePillBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isShown = profileMenu.classList.contains('show');
+        if (isShown) {
+          profileMenu.classList.remove('show');
+          profileCaret.classList.remove('open');
+        } else {
+          profileMenu.classList.add('show');
+          profileCaret.classList.add('open');
+        }
+      });
+
+      // Close dropdown when clicking anywhere outside
+      document.addEventListener('click', (e) => {
+        if (!profilePillBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+          profileMenu.classList.remove('show');
+          profileCaret.classList.remove('open');
+        }
+      });
+
+      // Tab switcher interactions
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
