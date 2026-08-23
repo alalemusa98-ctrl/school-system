@@ -32,6 +32,7 @@
 | **قواعد البيانات والـ Schema** | [`project-documentation-v2/03_DATABASE_BLUEPRINT.md`](./project-documentation-v2/03_DATABASE_BLUEPRINT.md) و [`Rest-api/DATABASE_SCHEMA.md`](./Rest-api/DATABASE_SCHEMA.md) |
 | **الـ Backend والمعمارية** | [`project-documentation-v2/04_BACKEND_ARCHITECTURE.md`](./project-documentation-v2/04_BACKEND_ARCHITECTURE.md) |
 | **مصفوفة التتبع وتطابق الميزات** | [`project-documentation-v2/05_TRACEABILITY_MATRIX.md`](./project-documentation-v2/05_TRACEABILITY_MATRIX.md) |
+| **دليل ومعايير تطوير الذكاء الاصطناعي** | [`project-documentation-v2/06_AI_DEVELOPMENT_GUIDE.md`](./project-documentation-v2/06_AI_DEVELOPMENT_GUIDE.md) |
 | **شاشات وموديلات الـ Frontend والـ APIs** | [`Rest-api/STUDENT_REST_API.md`](./Rest-api/STUDENT_REST_API.md) و [`Rest-api/TEACHER_REST_API.md`](./Rest-api/TEACHER_REST_API.md) و [`Rest-api/ADMIN_REST_API.md`](./Rest-api/ADMIN_REST_API.md) |
 
 ---
