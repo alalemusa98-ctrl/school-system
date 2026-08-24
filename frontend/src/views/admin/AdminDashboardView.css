@@ -165,6 +165,37 @@
 .user-profile-dropdown-container {
   position: relative;
   display: inline-block;
+  z-index: 1050;
+}
+
+.profile-dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1040;
+  background: transparent;
+}
+
+.quick-logout-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #e11d48;
+}
+
+.quick-logout-btn:hover {
+  background: #ffe4e6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.18);
 }
 
 .user-profile-pill {
@@ -230,14 +261,13 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 1000;
-  width: 240px;
-  background: rgba(255, 255, 255, 0.96);
+  z-index: 1060;
+  width: 250px;
+  background: #ffffff;
   border-radius: 16px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.04);
-  padding: 6px;
-  backdrop-filter: blur(16px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(15, 23, 42, 0.06);
+  padding: 8px;
   transform-origin: top left;
 }
 

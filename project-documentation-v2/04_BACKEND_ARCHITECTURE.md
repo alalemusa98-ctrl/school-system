@@ -1,6 +1,6 @@
 # ⚙️ 04. معمارية الخادم والبرمجيات الخلفية (Backend Architecture & APIs)
 
-> **الهدف:** توثيق البنية المعمارية لطبقات الخادم (Express Layered Architecture)، تدفق المصادقة، وسيط الحماية، وهيكل استجابات الـ REST APIs الموحد.
+> **الهدف:** توثيق البنية المعمارية لطبقات الخادم (Express Layered Architecture)، تدفق المصادقة، وسيط الحماية، وهيكل استجابات الـ REST APIs الموحد والمنضبط.
 
 ---
 
@@ -37,10 +37,13 @@ graph TD
 
 ## 🔑 2. تدفق المصادقة وهيكل التوكن (Authentication & JWT Payload)
 
-### 2.1 نقاط دخول المصادقة (`/api/auth`)
-1. **دخول الطالب:** `POST /api/auth/student-login` (عبر `roll_number`).
-2. **دخول المعلم / الإدارة:** `POST /api/auth/login` (عبر `username` + `password`).
-3. **التحقق من الجلسة:** `GET /api/auth/me` (استرجاع بيانات المستخدم الحالي من التوكن).
+### 2.1 نقاط دخول المصادقة المعيارية (`/api/auth`)
+1. **دخول الطالب:** `POST /api/auth/login/student` (عبر `roll_number` + `student_code`).
+2. **دخول المعلم:** `POST /api/auth/login/teacher` (عبر `username` + `password`).
+3. **دخول المشرف:** `POST /api/auth/login/admin` (عبر `username` + `password`).
+4. **فحص الجلسة:** `GET /api/auth/me` (استرجاع هوية وتوكن المستخدم الحالي).
+
+*(ملاحظة: تدعم المسارات أيضاً أسماء مستعارة `/student-login`, `/teacher-login`, `/admin-login` لضمان التوافقية العكسية).*
 
 ### 2.2 محتويات التوكن المفكك (`req.user` JWT Payload):
 ```json
@@ -58,19 +61,33 @@ graph TD
 
 ---
 
-## 📦 3. عقود الاستجابة الموحدة (Standard API Response Contract)
+## 📦 3. عقود الاستجابة الموحدة (Standardized API Response Contract)
 
-### 3.1 استجابة النجاح (Success Response):
+### 3.1 استجابة الكائن الفردي أو الإجراء (Single Object / Action):
 ```json
 {
   "success": true,
   "message": "تمت العملية بنجاح.",
-  "data": { ... },
-  "count": 5
+  "data": {
+    "id": 1,
+    "name": "الصف الخامس"
+  }
 }
 ```
 
-### 3.2 استجابة الخطأ (Error Response):
+### 3.2 استجابة القوائم والمجموعات (Collection / Array):
+```json
+{
+  "success": true,
+  "count": 5,
+  "data": [
+    { "id": 1, "name": "التربية الإسلامية" },
+    { "id": 2, "name": "الرياضيات" }
+  ]
+}
+```
+
+### 3.3 استجابة الأخطاء الموحدة (Standard Error Response):
 ```json
 {
   "success": false,

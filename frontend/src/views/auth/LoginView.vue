@@ -1,105 +1,220 @@
 <template>
-  <div class="login-page">
-    <div class="login-card-wrapper animate-fade-in">
-      <div class="login-header">
-        <div class="app-logo">🏫</div>
-        <h2>مدرستي الذهبية</h2>
-        <p>نظام إدارة المدرسة المرتكز على الطالب</p>
-      </div>
+  <div class="login-wrapper">
+    <!-- Radiant Dynamic Ambient Glow Orbs -->
+    <div class="ambient-glow glow-top-right"></div>
+    <div class="ambient-glow glow-bottom-left"></div>
+    <div class="ambient-glow glow-center"></div>
 
-      <!-- Role Selector Cards -->
-      <div class="role-selector">
-        <div 
-          class="role-card" 
-          :class="{ active: activeRole === 'STUDENT' }"
-          @click="selectRole('STUDENT')"
-        >
-          <span class="role-icon">🎒</span>
-          <span class="role-label">دخول الطالب</span>
+    <div class="login-container animate-fade-in">
+      <!-- Centered Wide & Compact Login Form Card -->
+      <div class="login-card">
+        <!-- Brand Header with 3D Icon -->
+        <div class="brand-header">
+          <div class="brand-3d-box">
+            <img :src="schoolImg" alt="School Logo" class="brand-3d-img" />
+          </div>
+          <div class="brand-titles">
+            <div class="system-badge">
+              <span class="pulse-dot"></span>
+              نظام الإدارة المدرسيّة المعتمد
+            </div>
+            <h1 class="brand-main-title">منظومة مدرستي الذكية</h1>
+            <p class="brand-sub-title">بوابة تسجيل الدخول المركزية للطلاب وكادر التدريس والإدارة</p>
+          </div>
         </div>
-        <div 
-          class="role-card" 
-          :class="{ active: activeRole === 'TEACHER' }"
-          @click="selectRole('TEACHER')"
-        >
-          <span class="role-icon">👨‍🏫</span>
-          <span class="role-label">دخول المعلم</span>
-        </div>
-        <div 
-          class="role-card" 
-          :class="{ active: activeRole === 'ADMIN' }"
-          @click="selectRole('ADMIN')"
-        >
-          <span class="role-icon">⚙️</span>
-          <span class="role-label">دخول الإدارة</span>
-        </div>
-      </div>
 
-      <!-- Student Login Form -->
-      <form v-if="activeRole === 'STUDENT'" @submit.prevent="handleStudentLogin" class="login-form">
-        <div class="form-group">
-          <label>رقم الجلوس</label>
-          <input 
-            type="text" 
-            v-model="studentForm.roll_number" 
-            placeholder="مثال: 1001" 
-            required 
-            class="form-control"
-          />
-        </div>
-        <div class="form-group">
-          <label>كود الطالب الخاص</label>
-          <input 
-            type="password" 
-            v-model="studentForm.student_code" 
-            placeholder="مثال: ST1001" 
-            required 
-            class="form-control"
-          />
-        </div>
-        <div class="demo-hint">
-          💡 بيانات الطالب التجريبي: رقم الجلوس <code>1001</code> والكود <code>ST1001</code>
-        </div>
-        <BaseButton variant="primary" block size="lg" :loading="loading" type="submit">
-          دخول الطالب 🚀
-        </BaseButton>
-      </form>
+        <!-- Sleek 3D Segmented Role Switcher -->
+        <div class="role-segmented-control" role="tablist">
+          <button 
+            type="button"
+            role="tab"
+            :aria-selected="activeRole === 'STUDENT'"
+            class="role-tab" 
+            :class="{ active: activeRole === 'STUDENT' }"
+            @click="selectRole('STUDENT')"
+          >
+            <div class="tab-icon-wrap student-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+            </div>
+            <span class="tab-label">الطالب</span>
+          </button>
 
-      <!-- Teacher / Admin Login Form -->
-      <form v-else @submit.prevent="handleStaffLogin" class="login-form">
-        <div class="form-group">
-          <label>اسم المستخدم</label>
-          <input 
-            type="text" 
-            v-model="staffForm.username" 
-            :placeholder="activeRole === 'TEACHER' ? 'مثال: teacher1' : 'مثال: admin'" 
-            required 
-            class="form-control"
-          />
-        </div>
-        <div class="form-group">
-          <label>كلمة المرور</label>
-          <input 
-            type="password" 
-            v-model="staffForm.password" 
-            placeholder="••••••••" 
-            required 
-            class="form-control"
-          />
-        </div>
-        <div class="demo-hint" v-if="activeRole === 'TEACHER'">
-          💡 بيانات المعلم التجريبي: اسم المستخدم <code>teacher1</code> وكلمة المرور <code>teacher123</code>
-        </div>
-        <div class="demo-hint" v-if="activeRole === 'ADMIN'">
-          💡 بيانات الإدارة التجريبية: اسم المستخدم <code>admin</code> وكلمة المرور <code>admin123</code>
-        </div>
-        <BaseButton variant="primary" block size="lg" :loading="loading" type="submit">
-          تسجيل الدخول 🔐
-        </BaseButton>
-      </form>
+          <button 
+            type="button"
+            role="tab"
+            :aria-selected="activeRole === 'TEACHER'"
+            class="role-tab" 
+            :class="{ active: activeRole === 'TEACHER' }"
+            @click="selectRole('TEACHER')"
+          >
+            <div class="tab-icon-wrap teacher-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <span class="tab-label">المعلم</span>
+          </button>
 
-      <div v-if="errorMsg" class="error-banner">
-        ⚠️ {{ errorMsg }}
+          <button 
+            type="button"
+            role="tab"
+            :aria-selected="activeRole === 'ADMIN'"
+            class="role-tab" 
+            :class="{ active: activeRole === 'ADMIN' }"
+            @click="selectRole('ADMIN')"
+          >
+            <div class="tab-icon-wrap admin-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <span class="tab-label">الإدارة</span>
+          </button>
+        </div>
+
+        <!-- Student Login Form -->
+        <form v-if="activeRole === 'STUDENT'" @submit.prevent="handleStudentLogin" class="auth-form">
+          <div class="input-field-group">
+            <label class="field-label">رقم الجلوس الأكاديمي</label>
+            <div class="input-wrapper">
+              <span class="input-prefix-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
+              </span>
+              <input 
+                type="text" 
+                v-model="studentForm.roll_number" 
+                placeholder="أدخل رقم الجلوس (مثال: 1001)" 
+                required 
+                autocomplete="username"
+                class="modern-input"
+              />
+            </div>
+          </div>
+
+          <div class="input-field-group">
+            <label class="field-label">كود التحقق الخاص بالطالب</label>
+            <div class="input-wrapper">
+              <span class="input-prefix-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input 
+                :type="showPassword ? 'text' : 'password'" 
+                v-model="studentForm.student_code" 
+                placeholder="أدخل كود الطالب (مثال: ST1001)" 
+                required 
+                autocomplete="current-password"
+                class="modern-input"
+              />
+              <button 
+                type="button" 
+                class="password-toggle-btn" 
+                @click="showPassword = !showPassword"
+                title="إظهار / إخفاء الرمز"
+              >
+                <svg v-if="!showPassword" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg v-else width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Test Credentials Pill -->
+          <div class="demo-credential-card" @click="fillDemo('STUDENT')">
+            <div class="demo-card-content">
+              <span class="demo-badge">⚡ تجربة سريعة:</span>
+              <span class="demo-text">رقم الجلوس: <strong>1001</strong> | الكود: <strong>ST1001</strong></span>
+            </div>
+            <button type="button" class="demo-apply-btn">تعبئة فورية</button>
+          </div>
+
+          <button type="submit" class="submit-auth-btn" :disabled="loading">
+            <span v-if="!loading" class="btn-inner">
+              <span>تسجيل دخول الطالب</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </span>
+            <span v-else class="btn-loader">
+              <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              <span>جاري التحقق...</span>
+            </span>
+          </button>
+        </form>
+
+        <!-- Teacher / Admin Login Form -->
+        <form v-else @submit.prevent="handleStaffLogin" class="auth-form">
+          <div class="input-field-group">
+            <label class="field-label">اسم المستخدم</label>
+            <div class="input-wrapper">
+              <span class="input-prefix-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input 
+                type="text" 
+                v-model="staffForm.username" 
+                :placeholder="activeRole === 'TEACHER' ? 'أدخل اسم المعلم (مثال: teacher1)' : 'أدخل اسم المستخدم (مثال: admin)'" 
+                required 
+                autocomplete="username"
+                class="modern-input"
+              />
+            </div>
+          </div>
+
+          <div class="input-field-group">
+            <label class="field-label">كلمة المرور السرية</label>
+            <div class="input-wrapper">
+              <span class="input-prefix-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input 
+                :type="showPassword ? 'text' : 'password'" 
+                v-model="staffForm.password" 
+                placeholder="••••••••" 
+                required 
+                autocomplete="current-password"
+                class="modern-input"
+              />
+              <button 
+                type="button" 
+                class="password-toggle-btn" 
+                @click="showPassword = !showPassword"
+                title="إظهار / إخفاء كلمة المرور"
+              >
+                <svg v-if="!showPassword" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg v-else width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Test Credentials Pill -->
+          <div class="demo-credential-card" @click="fillDemo(activeRole)">
+            <div class="demo-card-content">
+              <span class="demo-badge">⚡ تجربة سريعة:</span>
+              <span v-if="activeRole === 'TEACHER'" class="demo-text">المستخدم: <strong>teacher1</strong> | كلمة المرور: <strong>teacher123</strong></span>
+              <span v-else class="demo-text">المستخدم: <strong>admin</strong> | كلمة المرور: <strong>admin123</strong></span>
+            </div>
+            <button type="button" class="demo-apply-btn">تعبئة فورية</button>
+          </div>
+
+          <button type="submit" class="submit-auth-btn" :disabled="loading">
+            <span v-if="!loading" class="btn-inner">
+              <span>{{ activeRole === 'TEACHER' ? 'تسجيل دخول كادر التدريس' : 'تسجيل دخول الإدارة العامة' }}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </span>
+            <span v-else class="btn-loader">
+              <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              <span>جاري التحقق...</span>
+            </span>
+          </button>
+        </form>
+
+        <!-- Error Notification Banner -->
+        <transition name="fade-slide">
+          <div v-if="errorMsg" class="error-banner">
+            <div class="error-icon-box">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <span class="error-text">{{ errorMsg }}</span>
+          </div>
+        </transition>
+
+        <!-- Footer Credits -->
+        <div class="login-footer">
+          <span>نظام إدارة المدرسة الشامل © 2025/2026 - الإصدار 1.0 المعتمد</span>
+        </div>
       </div>
     </div>
   </div>
@@ -109,11 +224,12 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../../services/api';
-import BaseButton from '../../components/common/BaseButton.vue';
+import schoolImg from '../../assets/school_building_3d.png';
 
 const router = useRouter();
 const activeRole = ref('STUDENT');
 const loading = ref(false);
+const showPassword = ref(false);
 const errorMsg = ref('');
 
 const studentForm = reactive({
@@ -129,7 +245,21 @@ const staffForm = reactive({
 function selectRole(role) {
   activeRole.value = role;
   errorMsg.value = '';
+  showPassword.value = false;
 
+  if (role === 'STUDENT') {
+    studentForm.roll_number = '1001';
+    studentForm.student_code = 'ST1001';
+  } else if (role === 'TEACHER') {
+    staffForm.username = 'teacher1';
+    staffForm.password = 'teacher123';
+  } else if (role === 'ADMIN') {
+    staffForm.username = 'admin';
+    staffForm.password = 'admin123';
+  }
+}
+
+function fillDemo(role) {
   if (role === 'STUDENT') {
     studentForm.roll_number = '1001';
     studentForm.student_code = 'ST1001';
@@ -153,7 +283,7 @@ async function handleStudentLogin() {
       router.push('/student');
     }
   } catch (err) {
-    errorMsg.value = err.response?.data?.message || 'فشل تسجيل دخول الطالب. يرجى التأكد من البيانات.';
+    errorMsg.value = err.response?.data?.message || 'فشل تسجيل دخول الطالب. يرجى التأكد من صحة رقم الجلوس والكود.';
   } finally {
     loading.value = false;
   }
@@ -168,8 +298,11 @@ async function handleStaffLogin() {
     if (res.data.success) {
       localStorage.setItem('school_token', res.data.token);
       localStorage.setItem('school_user', JSON.stringify(res.data.user));
-      if (activeRole.value === 'TEACHER') router.push('/teacher');
-      else router.push('/admin');
+      if (activeRole.value === 'TEACHER') {
+        router.push('/teacher');
+      } else {
+        router.push('/admin');
+      }
     }
   } catch (err) {
     errorMsg.value = err.response?.data?.message || 'اسم المستخدم أو كلمة المرور غير صحيحة.';
@@ -180,140 +313,464 @@ async function handleStaffLogin() {
 </script>
 
 <style scoped>
-.login-page {
+/* ===== LIVELY & BRIGHT MODERN APPLE/SAAS LOGIN STYLES ===== */
+.login-wrapper {
   min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #fdf4ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-  padding: 20px;
+  padding: 24px 16px;
+  position: relative;
+  overflow: hidden;
+  direction: rtl;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Arabic", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-.login-card-wrapper {
-  background: #ffffff;
+/* Radiant Ambient glowing mesh orbs */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glow-top-right {
+  top: -12%;
+  right: -8%;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.38) 0%, rgba(199, 210, 254, 0.28) 50%, rgba(240, 244, 255, 0) 70%);
+}
+
+.glow-bottom-left {
+  bottom: -15%;
+  left: -10%;
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.28) 0%, rgba(192, 132, 252, 0.22) 45%, rgba(240, 244, 255, 0) 70%);
+}
+
+.glow-center {
+  top: 30%;
+  left: 40%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, rgba(147, 197, 253, 0.15) 50%, rgba(240, 244, 255, 0) 70%);
+}
+
+/* Centered Layout Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 580px;
   width: 100%;
-  max-width: 480px;
-  border-radius: var(--radius-lg);
-  padding: 40px 32px;
-  box-shadow: var(--shadow-lg);
-  border: 2px solid #e0e7ff;
+  position: relative;
+  z-index: 10;
 }
 
-.login-header {
-  text-align: center;
-  margin-bottom: 28px;
+/* Single Wide & Compact Form Card */
+.login-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 26px;
+  padding: 30px 36px;
+  box-shadow: 0 20px 50px rgba(79, 70, 229, 0.12), 0 4px 16px rgba(15, 23, 42, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(28px);
 }
 
-.app-logo {
-  font-size: 3.5rem;
-  margin-bottom: 8px;
+@media (max-width: 640px) {
+  .login-card {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
 }
 
-.login-header h2 {
-  font-size: 1.8rem;
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.brand-3d-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.2);
+  flex-shrink: 0;
+  border: 1.5px solid #c7d2fe;
+}
+
+.brand-3d-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.system-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 11px;
   font-weight: 800;
-  color: var(--primary-color);
+  padding: 2px 9px;
+  border-radius: 20px;
+  width: fit-content;
+  margin-bottom: 4px;
+  border: 1px solid #c7d2fe;
 }
 
-.login-header p {
-  font-size: 0.9rem;
-  color: var(--text-muted);
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
 }
 
-.role-selector {
+.brand-main-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.brand-sub-title {
+  font-size: 12px;
+  color: #64748b;
+  margin: 1px 0 0 0;
+  font-weight: 600;
+}
+
+/* Role Segmented Controller */
+.role-segmented-control {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.role-card {
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 12px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.role-card.active {
-  background: #eef2ff;
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
-}
-
-.role-icon {
-  font-size: 1.5rem;
-}
-
-.role-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 16px;
   gap: 6px;
+  margin-bottom: 18px;
+  border: 1px solid #e2e8f0;
 }
 
-.form-group label {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text-main);
-}
-
-.form-control {
+.role-tab {
+  border: none;
+  background: transparent;
+  padding: 8px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #64748b;
   font-family: inherit;
-  font-size: 1.05rem;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  border: 2px solid var(--border-light);
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-control:focus {
-  border-color: var(--primary-color);
-}
-
-.demo-hint {
-  background: #fefce8;
-  border: 1px solid #fef08a;
-  color: #854d0e;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-}
-
-.demo-hint code {
-  background: #fef08a;
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 13.5px;
   font-weight: 700;
 }
 
-.error-banner {
-  margin-top: 20px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
+.role-tab:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.role-tab.active {
+  background: #ffffff;
+  color: #4f46e5;
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.12), 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.tab-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.role-tab.active .tab-icon-wrap {
+  transform: scale(1.1);
+}
+
+/* Form Styles */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.input-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix-icon {
+  position: absolute;
+  right: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 10.5px 38px 10.5px 38px;
+  border-radius: 13px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  font-family: inherit;
+  font-size: 13.5px;
   font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+}
+
+.modern-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+}
+
+.password-toggle-btn {
+  position: absolute;
+  left: 11px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  color: #64748b;
+  border-radius: 6px;
+  transition: opacity 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  opacity: 0.8;
+}
+
+/* Demo Credential Quick Box */
+.demo-credential-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1.5px dashed #c7d2fe;
+  border-radius: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-credential-card:hover {
+  background: #eef2ff;
+  border-color: #818cf8;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.1);
+}
+
+.demo-card-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.demo-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #4f46e5;
+}
+
+.demo-text {
+  font-size: 11.5px;
+  color: #475569;
+}
+
+.demo-apply-btn {
+  background: #4f46e5;
+  border: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+  flex-shrink: 0;
+}
+
+.demo-credential-card:hover .demo-apply-btn {
+  background: #4338ca;
+  transform: scale(1.03);
+}
+
+/* Submit Action Button */
+.submit-auth-btn {
+  margin-top: 4px;
+  width: 100%;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12.5px 18px;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.32);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-auth-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.42);
+  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+}
+
+.submit-auth-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-auth-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.btn-loader {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.spinner {
+  animation: rotate 1.8s linear infinite;
+  width: 18px;
+  height: 18px;
+}
+
+.spinner .path {
+  stroke: #ffffff;
+  stroke-linecap: round;
+  animation: dash 1.4s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes dash {
+  0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+  100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+}
+
+/* Error Banner */
+.error-banner {
+  margin-top: 14px;
+  background: #fff1f2;
+  border: 1px solid #ffe4e6;
+  border-radius: 12px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-icon-box {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.error-text {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #be123c;
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 18px;
   text-align: center;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.22s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 </style>

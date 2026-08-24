@@ -143,7 +143,9 @@ exports.createTask = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم إنشاء المهمة بنجاح.',
-      taskId: result.insertId
+      data: {
+        taskId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createTask:', err);
@@ -175,6 +177,25 @@ exports.updateTask = async (req, res) => {
 
     const currentTask = existing[0];
 
+    // إعادة التحقق من نصاب التدريس في حال تم تعديل المادة أو الشعبة
+    const targetSubjectId = subject_id !== undefined ? parseInt(subject_id, 10) : currentTask.subject_id;
+    const targetSectionId = section_id !== undefined ? parseInt(section_id, 10) : currentTask.section_id;
+
+    if (subject_id !== undefined || section_id !== undefined) {
+      const [assignments] = await db.query(
+        `SELECT id FROM teacher_assignments 
+         WHERE teacher_id = ? AND subject_id = ? AND section_id = ?`,
+        [teacherId, targetSubjectId, targetSectionId]
+      );
+
+      if (assignments.length === 0) {
+        return res.status(403).json({
+          success: false,
+          message: 'عذراً، أنت غير مكلف بتدريس هذه المادة لهذه الشعبة.'
+        });
+      }
+    }
+
     let attachmentPath = currentTask.attachment_path;
     let solutionAttachmentPath = currentTask.solution_attachment_path;
 
@@ -201,8 +222,8 @@ exports.updateTask = async (req, res) => {
         title || currentTask.title,
         description !== undefined ? description : currentTask.description,
         task_type ? task_type.toUpperCase() : currentTask.task_type,
-        subject_id || currentTask.subject_id,
-        section_id || currentTask.section_id,
+        targetSubjectId,
+        targetSectionId,
         attachmentPath,
         due_date !== undefined ? due_date : currentTask.due_date,
         hasSolutionVal,
@@ -215,7 +236,10 @@ exports.updateTask = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'تم تعديل المهمة بنجاح.'
+      message: 'تم تعديل المهمة بنجاح.',
+      data: {
+        taskId: parseInt(taskId, 10)
+      }
     });
   } catch (err) {
     console.error('Error in updateTask:', err);

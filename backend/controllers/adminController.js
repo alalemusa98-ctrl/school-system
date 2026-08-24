@@ -16,6 +16,12 @@ exports.getStats = async (req, res) => {
         totalTeachers,
         totalSections,
         totalTasks
+      },
+      data: {
+        totalStudents,
+        totalTeachers,
+        totalSections,
+        totalTasks
       }
     });
   } catch (err) {
@@ -80,7 +86,10 @@ exports.createGrade = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم إضافة الصف الدراسي بنجاح.',
-      gradeId: result.insertId
+      gradeId: result.insertId,
+      data: {
+        gradeId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createGrade:', err);
@@ -121,7 +130,10 @@ exports.createSection = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم إضافة الشعبة بنجاح.',
-      sectionId: result.insertId
+      sectionId: result.insertId,
+      data: {
+        sectionId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createSection:', err);
@@ -215,7 +227,10 @@ exports.createSubject = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم إضافة المادة بنجاح.',
-      subjectId: result.insertId
+      subjectId: result.insertId,
+      data: {
+        subjectId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createSubject:', err);
@@ -321,7 +336,10 @@ exports.createStudent = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم تسجيل الطالب بنجاح.',
-      studentId: result.insertId
+      studentId: result.insertId,
+      data: {
+        studentId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createStudent:', err);
@@ -456,7 +474,10 @@ exports.createTeacher = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم إضافة حساب المعلم بنجاح.',
-      teacherId: result.insertId
+      teacherId: result.insertId,
+      data: {
+        teacherId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createTeacher:', err);
@@ -544,7 +565,10 @@ exports.createAssignment = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'تم تكليف المعلم بنجاح.',
-      assignmentId: result.insertId
+      assignmentId: result.insertId,
+      data: {
+        assignmentId: result.insertId
+      }
     });
   } catch (err) {
     console.error('Error in createAssignment:', err);
