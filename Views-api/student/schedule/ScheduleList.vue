@@ -2,7 +2,7 @@
   <main class="hw-container">
     <!-- Loading State -->
     <div v-if="loading" class="loading-state">
-      جاري استرجاع جدول الحصص من قاعدة البيانات... ⏳
+      جاري استرجاع جدول الحصص المدرسية... ⏳
     </div>
 
     <!-- Main Schedule Days List -->
@@ -12,17 +12,17 @@
         :key="day.id" 
         class="sched-ref-card"
       >
-        <!-- 1. رقم اليوم في النتوء العلوي -->
+        <!-- 1. رقم اليوم في النتوء العلوي (دائري 54px وإطار أبيض 8px) -->
         <div class="sched-ref-top-notch">
           {{ day.num }}
         </div>
 
         <!-- 2. اسم اليوم في رأس الكارد -->
         <div class="sched-ref-header-info">
-          <h3 class="sched-ref-day-title">يوم {{ day.name }}</h3>
+          <h3 class="sched-ref-day-title">جدول يوم {{ day.name }}</h3>
         </div>
 
-        <!-- 3. شبكة الحصص (في كل صف 3 عناصر) -->
+        <!-- 3. شبكة الحصص المدرسية (3 عناصر في كل صف) -->
         <div v-if="getSlotsForDay(day.id).length === 0" class="sched-no-lessons">
           ☀️ لا توجد حصص دراسية مقررة لهذا اليوم.
         </div>
@@ -34,7 +34,7 @@
             class="sched-subject-squircle"
             :class="{ highlighted: selectedSubject !== 'ALL' && getSubjectId(slot.subject_name) === selectedSubject }"
           >
-            <!-- Squircle Subject Icon -->
+            <!-- Squircle Subject Icon (صورة 3D أو إيموجي للمواد بدون صورة) -->
             <div class="sched-icon-box" :class="getSubjectColorClass(slot.subject_name)">
               <img v-if="getSubjectImage(slot.subject_name)" :src="getSubjectImage(slot.subject_name)" class="subject-3d-icon-render" alt="" />
               <span v-else>{{ getSubjectIcon(slot.subject_name) }}</span>
@@ -69,6 +69,11 @@
 </template>
 
 <script setup>
+import mathImg from '@/assets/math_3d.jpg';
+import scienceImg from '@/assets/science_3d.jpg';
+import englishImg from '@/assets/english_3d.jpg';
+import islamicImg from '@/assets/islamic_3d.jpg';
+
 const props = defineProps({
   loading: { type: Boolean, default: false },
   selectedSubject: { type: String, default: 'ALL' },
@@ -91,7 +96,11 @@ const fallbackSlots = [
   { id: 3, day_of_week: 1, slot_number: 3, subject_name: 'اللغة العربية', teacher_name: 'أ. عمر الشريف' },
   { id: 4, day_of_week: 1, slot_number: 4, subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. مريم الفيتوري' },
   { id: 5, day_of_week: 1, slot_number: 5, subject_name: 'التربية الإسلامية', teacher_name: 'أ. أسامة علي' },
-  { id: 6, day_of_week: 1, slot_number: 6, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم' }
+  { id: 6, day_of_week: 1, slot_number: 6, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم' },
+  // Day 2
+  { id: 7, day_of_week: 2, slot_number: 1, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي' },
+  { id: 8, day_of_week: 2, slot_number: 2, subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. مريم الفيتوري' },
+  { id: 9, day_of_week: 2, slot_number: 3, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم' }
 ];
 
 function getSlotsForDay(dayId) {
@@ -132,16 +141,19 @@ function getSubjectColorClass(name) {
 }
 
 function getSubjectImage(name) {
+  if (!name) return null;
+  if (name.includes('رياضيات')) return mathImg || '/images/math_3d.jpg';
+  if (name.includes('علوم')) return scienceImg || '/images/science_3d.jpg';
+  if (name.includes('إنجليز')) return englishImg || '/images/english_3d.jpg';
+  if (name.includes('إسلام')) return islamicImg || '/images/islamic_3d.jpg';
   return null;
 }
 
 function getSubjectIcon(name) {
-  const id = getSubjectId(name);
-  if (id === 'math') return '📐';
-  if (id === 'science') return '🔬';
-  if (id === 'arabic') return '📖';
-  if (id === 'english') return '🔤';
-  if (id === 'islamic') return '🕌';
+  if (!name) return '📚';
+  if (name.includes('عرب')) return '📖';
+  if (name.includes('حاسوب')) return '💻';
+  if (name.includes('اجتماع')) return '🌍';
   return '📚';
 }
 </script>
@@ -177,11 +189,11 @@ function getSubjectIcon(name) {
 }
 
 .sched-ref-top-notch {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(352deg, rgba(16, 185, 129, 0.62) 0%, rgba(167, 243, 208, 0.7) 100%);
   color: #ffffff;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
   border-radius: 50%;
   display: flex;
@@ -191,8 +203,8 @@ function getSubjectIcon(name) {
   top: -22px;
   left: 50%;
   transform: translateX(-50%);
-  border: 4px solid #f8fafc;
-  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35);
+  border: 8px solid #fff;
+  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.35) inset;
 }
 
 .sched-ref-header-info {
@@ -234,14 +246,23 @@ function getSubjectIcon(name) {
 }
 
 .sched-icon-box {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 14px;
-  background: #d1fae5;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 22px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.subject-3d-icon-render {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .sched-period-tag {

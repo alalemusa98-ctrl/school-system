@@ -66,6 +66,115 @@
             </div>
             <span class="tab-label">الإدارة</span>
           </button>
+
+          <button 
+            type="button"
+            role="tab"
+            :aria-selected="activeRole === 'VIEWS_PREVIEW'"
+            class="role-tab views-tab" 
+            :class="{ active: activeRole === 'VIEWS_PREVIEW' }"
+            @click="selectRole('VIEWS_PREVIEW')"
+          >
+            <div class="tab-icon-wrap views-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <span class="tab-label">تصاميم .vue</span>
+          </button>
+        </div>
+
+        <!-- Views-API Component Explorer Section -->
+        <div v-if="activeRole === 'VIEWS_PREVIEW'" class="views-preview-panel">
+          <!-- Folder Pills -->
+          <div class="api-folder-pills">
+            <button 
+              type="button" 
+              class="api-pill" 
+              :class="{ active: selectedApiFolder === 'homeworks' }"
+              @click="selectedApiFolder = 'homeworks'; selectedApiComponent = 'HomeworkHeader'"
+            >
+              📚 الواجبات (`homeworks`)
+            </button>
+            <button 
+              type="button" 
+              class="api-pill" 
+              :class="{ active: selectedApiFolder === 'dashboard' }"
+              @click="selectedApiFolder = 'dashboard'; selectedApiComponent = 'DashboardHeader'"
+            >
+              🏠 الداشبورد (`dashboard`)
+            </button>
+            <button 
+              type="button" 
+              class="api-pill" 
+              :class="{ active: selectedApiFolder === 'exams' }"
+              @click="selectedApiFolder = 'exams'; selectedApiComponent = 'ExamHeader'"
+            >
+              📝 الامتحانات (`exams`)
+            </button>
+            <button 
+              type="button" 
+              class="api-pill" 
+              :class="{ active: selectedApiFolder === 'schedule' }"
+              @click="selectedApiFolder = 'schedule'; selectedApiComponent = 'ScheduleHeader'"
+            >
+              📅 الجدول (`schedule`)
+            </button>
+            <button 
+              type="button" 
+              class="api-pill" 
+              :class="{ active: selectedApiFolder === 'subjects' }"
+              @click="selectedApiFolder = 'subjects'; selectedApiComponent = 'SubjectHeader'"
+            >
+              📘 المواد (`subjects`)
+            </button>
+          </div>
+
+          <!-- Component Sub-tabs -->
+          <div class="api-component-tabs">
+            <template v-if="selectedApiFolder === 'homeworks'">
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'HomeworkHeader' }" @click="selectedApiComponent = 'HomeworkHeader'">HomeworkHeader.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'HomeworkTabs' }" @click="selectedApiComponent = 'HomeworkTabs'">HomeworkTabs.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'HomeworkList' }" @click="selectedApiComponent = 'HomeworkList'">HomeworkList.vue</button>
+            </template>
+            <template v-else-if="selectedApiFolder === 'dashboard'">
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'DashboardHeader' }" @click="selectedApiComponent = 'DashboardHeader'">DashboardHeader.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'DashboardDays' }" @click="selectedApiComponent = 'DashboardDays'">DashboardDays.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'DashboardCards' }" @click="selectedApiComponent = 'DashboardCards'">DashboardCards.vue</button>
+            </template>
+            <template v-else-if="selectedApiFolder === 'exams'">
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ExamHeader' }" @click="selectedApiComponent = 'ExamHeader'">ExamHeader.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ExamTabs' }" @click="selectedApiComponent = 'ExamTabs'">ExamTabs.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ExamList' }" @click="selectedApiComponent = 'ExamList'">ExamList.vue</button>
+            </template>
+            <template v-else-if="selectedApiFolder === 'schedule'">
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ScheduleHeader' }" @click="selectedApiComponent = 'ScheduleHeader'">ScheduleHeader.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ScheduleTabs' }" @click="selectedApiComponent = 'ScheduleTabs'">ScheduleTabs.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'ScheduleList' }" @click="selectedApiComponent = 'ScheduleList'">ScheduleList.vue</button>
+            </template>
+            <template v-else-if="selectedApiFolder === 'subjects'">
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'SubjectHeader' }" @click="selectedApiComponent = 'SubjectHeader'">SubjectHeader.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'SubjectTabs' }" @click="selectedApiComponent = 'SubjectTabs'">SubjectTabs.vue</button>
+              <button type="button" class="comp-btn" :class="{ active: selectedApiComponent === 'SubjectList' }" @click="selectedApiComponent = 'SubjectList'">SubjectList.vue</button>
+            </template>
+          </div>
+
+          <!-- Component File Info Banner -->
+          <div class="file-path-badge">
+            📂 مسار المكون في المشروع: <code>Views-api/student/{{ selectedApiFolder }}/{{ selectedApiComponent }}.vue</code>
+          </div>
+
+          <!-- Live Spec Preview Frame -->
+          <div class="mobile-preview-frame">
+            <component 
+              :is="getComponentInstance(selectedApiComponent)" 
+              :groupedCurrentHomeworks="mockHomeworks"
+              :groupedExams="mockExams"
+              :scheduleDays="mockSchedule"
+              :subjectsList="mockSubjects"
+              activeTab="current"
+            />
+          </div>
         </div>
 
         <!-- Student Login Form -->
@@ -226,11 +335,99 @@ import { useRouter } from 'vue-router';
 import api from '../../services/api';
 import schoolImg from '../../assets/school_building_3d.png';
 
+// Import Views-api Student components
+import HomeworkHeader from '@views-api/student/homeworks/HomeworkHeader.vue';
+import HomeworkTabs from '@views-api/student/homeworks/HomeworkTabs.vue';
+import HomeworkList from '@views-api/student/homeworks/HomeworkList.vue';
+
+import DashboardHeader from '@views-api/student/dashboard/DashboardHeader.vue';
+import DashboardDays from '@views-api/student/dashboard/DashboardDays.vue';
+import DashboardCards from '@views-api/student/dashboard/DashboardCards.vue';
+
+import ExamHeader from '@views-api/student/exams/ExamHeader.vue';
+import ExamTabs from '@views-api/student/exams/ExamTabs.vue';
+import ExamList from '@views-api/student/exams/ExamList.vue';
+
+import ScheduleHeader from '@views-api/student/schedule/ScheduleHeader.vue';
+import ScheduleTabs from '@views-api/student/schedule/ScheduleTabs.vue';
+import ScheduleList from '@views-api/student/schedule/ScheduleList.vue';
+
+import SubjectHeader from '@views-api/student/subjects/SubjectHeader.vue';
+import SubjectTabs from '@views-api/student/subjects/SubjectTabs.vue';
+import SubjectList from '@views-api/student/subjects/SubjectList.vue';
+
 const router = useRouter();
 const activeRole = ref('STUDENT');
 const loading = ref(false);
 const showPassword = ref(false);
 const errorMsg = ref('');
+
+const selectedApiFolder = ref('homeworks');
+const selectedApiComponent = ref('HomeworkHeader');
+
+const componentMap = {
+  HomeworkHeader,
+  HomeworkTabs,
+  HomeworkList,
+  DashboardHeader,
+  DashboardDays,
+  DashboardCards,
+  ExamHeader,
+  ExamTabs,
+  ExamList,
+  ScheduleHeader,
+  ScheduleTabs,
+  ScheduleList,
+  SubjectHeader,
+  SubjectTabs,
+  SubjectList
+};
+
+function getComponentInstance(name) {
+  return componentMap[name] || HomeworkHeader;
+}
+
+const mockHomeworks = ref([
+  {
+    dateKey: '2026-08-16',
+    index: 1,
+    dayName: 'الأحد',
+    dateFormatted: '16 أغسطس 2026',
+    homeworks: [
+      { id: 1, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', submitted: true, due_date: '16 أغسطس 2026', description: 'حل أسئلة الفصل الثالث من كتاب العلوم ص 45 إلى 48.' },
+      { id: 2, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', submitted: false, due_date: '16 أغسطس 2026', description: 'تمارين الهندسة وحساب المساحات في الصفحة 82.' }
+    ]
+  }
+]);
+
+const mockExams = ref([
+  {
+    dateKey: '2026-08-20',
+    index: 1,
+    dayName: 'الخميس',
+    dateFormatted: '20 أغسطس 2026',
+    exams: [
+      { id: 1, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', exam_time: '09:00 AM', room: 'قاعة 3', total_marks: 100 },
+      { id: 2, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', exam_time: '11:00 AM', room: 'قاعة 5', total_marks: 100 }
+    ]
+  }
+]);
+
+const mockSchedule = ref([
+  {
+    dayName: 'الأحد',
+    periods: [
+      { period_num: 1, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', start_time: '08:00', end_time: '08:45' },
+      { period_num: 2, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', start_time: '08:50', end_time: '09:35' }
+    ]
+  }
+]);
+
+const mockSubjects = ref([
+  { id: 1, name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', icon: '📐', progress: 85 },
+  { id: 2, name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', icon: '🔬', progress: 90 },
+  { id: 3, name: 'اللغة الإنجليزية', teacher_name: 'أ. سارة الحكيم', icon: '🔤', progress: 78 }
+]);
 
 const studentForm = reactive({
   roll_number: '1001',
@@ -243,6 +440,11 @@ const staffForm = reactive({
 });
 
 function selectRole(role) {
+  if (role === 'VIEWS_PREVIEW') {
+    router.push('/design-preview');
+    return;
+  }
+
   activeRole.value = role;
   errorMsg.value = '';
   showPassword.value = false;
@@ -772,5 +974,109 @@ async function handleStaffLogin() {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-6px);
+}
+
+/* ===== Views API Component Explorer Styles ===== */
+.views-icon {
+  background: rgba(168, 85, 247, 0.12);
+  color: #a855f7;
+}
+
+.role-tab.active .views-icon {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.views-preview-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.api-folder-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-behavior: smooth;
+}
+
+.api-folder-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.api-pill {
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.api-pill.active {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.api-component-tabs {
+  display: flex;
+  gap: 4px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 14px;
+}
+
+.comp-btn {
+  flex: 1;
+  padding: 7px 8px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: monospace;
+}
+
+.comp-btn.active {
+  background: #ffffff;
+  color: #6d28d9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.file-path-badge {
+  font-size: 11.5px;
+  color: #475569;
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+  text-align: center;
+  direction: ltr;
+}
+
+.file-path-badge code {
+  color: #6d28d9;
+  font-weight: 700;
+}
+
+.mobile-preview-frame {
+  max-height: 480px;
+  overflow-y: auto;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  background: #f8fafc;
 }
 </style>

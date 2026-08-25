@@ -19,6 +19,7 @@ import TeacherSubjectsView from '../views/teacher/TeacherSubjectsView.vue';
 
 // Admin View
 import AdminDashboardView from '../views/admin/AdminDashboardView.vue';
+import DesignPreviewView from '../views/DesignPreviewView.vue';
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     name: 'Login',
     component: LoginView,
     meta: { guestOnly: true }
+  },
+  {
+    path: '/design-preview',
+    name: 'DesignPreview',
+    component: DesignPreviewView,
+    meta: { requiresAuth: false }
   },
 
   // Student Routes

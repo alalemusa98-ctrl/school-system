@@ -179,6 +179,10 @@
 <script setup>
 import { ref } from 'vue';
 import ShadcnDrawer from '../../../frontend/src/components/common/ShadcnDrawer.vue';
+import mathImg from '@/assets/math_3d.jpg';
+import scienceImg from '@/assets/science_3d.jpg';
+import englishImg from '@/assets/english_3d.jpg';
+import islamicImg from '@/assets/islamic_3d.jpg';
 
 const props = defineProps({
   loading: { type: Boolean, default: false },
@@ -200,16 +204,19 @@ function getSubjectColorClass(name) {
 }
 
 function getSubjectImage(name) {
+  if (!name) return null;
+  if (name.includes('رياضيات')) return mathImg || '/images/math_3d.jpg';
+  if (name.includes('علوم')) return scienceImg || '/images/science_3d.jpg';
+  if (name.includes('إنجليز')) return englishImg || '/images/english_3d.jpg';
+  if (name.includes('إسلام')) return islamicImg || '/images/islamic_3d.jpg';
   return null;
 }
 
 function getSubjectIcon(name) {
   if (!name) return '📚';
-  if (name.includes('رياضيات')) return '📐';
-  if (name.includes('علوم')) return '🔬';
   if (name.includes('عرب')) return '📖';
-  if (name.includes('إنجليز')) return '🔤';
-  if (name.includes('إسلام')) return '🕌';
+  if (name.includes('حاسوب')) return '💻';
+  if (name.includes('اجتماع')) return '🌍';
   return '📚';
 }
 
@@ -255,11 +262,11 @@ function openSolutionModal(hw) {
 }
 
 .sched-ref-top-notch {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(352deg, #4f46e59e 0%, #c7d2feb3 100%);
   color: #ffffff;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 800;
   border-radius: 50%;
   display: flex;
@@ -269,8 +276,8 @@ function openSolutionModal(hw) {
   top: -22px;
   left: 50%;
   transform: translateX(-50%);
-  border: 4px solid #f8fafc;
-  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.35);
+  border: 8px solid #fff;
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.35) inset;
 }
 
 .sched-ref-header-info {
@@ -317,11 +324,20 @@ function openSolutionModal(hw) {
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: #e0e7ff;
+  background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.subject-3d-icon-render {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
 }
 
 .sched-period-tag {

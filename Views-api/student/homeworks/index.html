@@ -29,7 +29,7 @@
 
     /* ===== Design System Tokens & Base Styles ===== */
     :root {
-      --primary-gradient: linear-gradient(180deg, rgba(79, 70, 229, 0.65) 0%, rgba(67, 56, 202, 0.82) 100%), url('images/student_bg.jpg') center center / cover no-repeat;
+      --primary-gradient: linear-gradient(180deg, rgba(109, 40, 217, 0.78) 0%, rgba(91, 33, 182, 0.92) 100%), url('images/student_bg.jpg') center center / cover no-repeat;
       --bg-gradient: linear-gradient(180deg, rgba(248, 245, 255, 0.88) 0%, rgba(240, 247, 255, 0.92) 100%), url('images/student_bg.jpg') center top / cover no-repeat fixed;
       --font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, 'SF Pro Arabic', 'Cairo', system-ui, sans-serif;
       --text-dark: #0f172a;
@@ -185,19 +185,22 @@
     /* Floating Overlapping Hero Card */
     .ios-hero-card {
       position: relative;
-      margin: -50px 16px 0;
+      margin: -55px 16px 0;
       background: #ffffff;
-      border-radius: 24px;
-      padding: 18px 20px;
-      box-shadow: 0 16px 40px -10px rgba(124, 92, 252, 0.16), 0 4px 14px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(241, 245, 249, 0.9);
+      border-radius: 28px;
+      padding: 20px 22px;
+      box-shadow: 0 20px 45px -10px rgba(91, 33, 182, 0.22), 0 4px 16px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       z-index: 10;
-    }
-
-    .hero-card-header {
       display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .hero-text-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .hero-avatar-wrapper {
@@ -206,16 +209,16 @@
     }
 
     .hero-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 20px;
+      width: 72px;
+      height: 72px;
+      border-radius: 24px;
       background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
-      border: 2px solid #ffffff;
-      box-shadow: 0 6px 16px rgba(124, 92, 252, 0.15);
+      border: 2.5px solid #ffffff;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 8px 18px rgba(109, 40, 217, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      padding: 4px;
     }
 
     .hero-status-dot {
@@ -833,17 +836,17 @@
 
         <!-- Floating Overlapping Hero Card -->
         <div class="ios-hero-card">
-          <div class="hero-card-header">
-            <div class="hero-avatar-wrapper">
-              <div class="hero-avatar">📚</div>
-              <span class="hero-status-dot"></span>
-            </div>
+          <div class="hero-text-content">
+            <h2 class="hero-title">متابعة الواجبات والحلول النموذجية</h2>
+            <span class="hero-subtitle">الصف الخامس - الشعبة (أ5)</span>
+            <span class="hero-tag">الفصل الدراسي الأول 2026</span>
+          </div>
 
-            <div class="hero-info">
-              <h2 class="hero-title">متابعة الواجبات والحلول النموذجية</h2>
-              <span class="hero-subtitle">الصف الخامس - الشعبة (أ5)</span>
-              <span class="hero-tag">الفصل الدراسي الأول 2026</span>
+          <div class="hero-avatar-wrapper">
+            <div class="hero-avatar">
+              <img src="images/homework_assignments_3d.png" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(91, 33, 182, 0.25));" alt="كتب 3D" />
             </div>
+            <span class="hero-status-dot"></span>
           </div>
         </div>
       </header>

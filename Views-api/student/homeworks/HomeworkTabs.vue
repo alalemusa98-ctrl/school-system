@@ -27,7 +27,7 @@
       </button>
     </div>
 
-    <!-- Subject Filter Pills Row -->
+    <!-- Subject Filter Pills Row with 3D Subject Images ONLY for subjects with images -->
     <div class="subject-pills-row">
       <button 
         class="sub-pill" 
@@ -45,7 +45,12 @@
         :class="{ active: selectedSubject === sub.id }"
         @click="selectSubject(sub.id)"
       >
-        <img v-if="sub.image" :src="sub.image" class="sub-pill-3d-img" alt="" />
+        <img 
+          v-if="sub.image" 
+          :src="sub.image" 
+          class="sub-pill-3d-img" 
+          :alt="sub.name" 
+        />
         <div v-else class="sub-pill-icon-top">{{ sub.icon }}</div>
         <span class="sub-pill-name">{{ sub.name }}</span>
       </button>
@@ -54,6 +59,11 @@
 </template>
 
 <script setup>
+import mathImg from '@/assets/math_3d.jpg';
+import scienceImg from '@/assets/science_3d.jpg';
+import englishImg from '@/assets/english_3d.jpg';
+import islamicImg from '@/assets/islamic_3d.jpg';
+
 const props = defineProps({
   activeTab: {
     type: String,
@@ -70,11 +80,11 @@ const props = defineProps({
   subjectOptions: {
     type: Array,
     default: () => [
-      { id: 'math', name: 'الرياضيات', icon: '📐' },
-      { id: 'science', name: 'العلوم العامة', icon: '🔬' },
+      { id: 'math', name: 'الرياضيات', image: mathImg || '/images/math_3d.jpg' },
+      { id: 'science', name: 'العلوم العامة', image: scienceImg || '/images/science_3d.jpg' },
       { id: 'arabic', name: 'اللغة العربية', icon: '📖' },
-      { id: 'english', name: 'اللغة الإنجليزية', icon: '🔤' },
-      { id: 'islamic', name: 'التربية الإسلامية', icon: '🕌' },
+      { id: 'english', name: 'اللغة الإنجليزية', image: englishImg || '/images/english_3d.jpg' },
+      { id: 'islamic', name: 'التربية الإسلامية', image: islamicImg || '/images/islamic_3d.jpg' },
       { id: 'computer', name: 'الحاسوب والتقنية', icon: '💻' },
       { id: 'social', name: 'الدراسات الاجتماعية', icon: '🌍' }
     ]
@@ -162,8 +172,8 @@ function selectSubject(subjectId) {
 }
 
 .sub-pill {
-  min-width: 72px;
-  padding: 12px 10px;
+  min-width: 76px;
+  padding: 10px 10px;
   border-radius: 20px;
   background: #ffffff;
   border: 1.5px solid #e2e8f0;
@@ -191,9 +201,12 @@ function selectSubject(subjectId) {
 }
 
 .sub-pill-3d-img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #ffffff;
 }
 
 .sub-pill-name {

@@ -1,89 +1,111 @@
 <template>
-  <header class="dash-header-wrapper">
-    <!-- iOS Status Bar & Dynamic Island Overlay -->
-    <div class="ios-status-bar">
-      <span class="ios-time">{{ currentTime }}</span>
-      <div class="dynamic-island"></div>
-      <div class="ios-icons">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M2 20h20L12 4z"></path>
-        </svg>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-          <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-          <line x1="12" y1="20" x2="12.01" y2="20"></line>
-        </svg>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect>
-          <line x1="22" y1="11" x2="22" y2="13"></line>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Navigation Top Bar -->
-    <div class="dash-nav-bar">
-      <button class="nav-icon-btn logout-btn" @click="$emit('logout')" title="تسجيل الخروج">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-          <polyline points="16 17 21 12 16 7"></polyline>
-          <line x1="21" y1="12" x2="9" y2="12"></line>
-        </svg>
-      </button>
-
-      <h1 class="dash-school-title">{{ schoolName }}</h1>
-
-      <button class="nav-icon-btn notify-btn" @click="$emit('open-notifications')" title="التنبيهات">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Floating Profile Hero Card -->
-    <div class="dash-hero-card">
-      <div class="hero-header-row">
-        <div class="hero-text-info">
-          <h2 class="student-name">{{ studentName }}</h2>
-          <div class="grade-badge">{{ gradeSection }}</div>
-          <span class="dept-text">{{ department }}</span>
+  <header class="ios-header">
+    <!-- Gradient Top Header Banner -->
+    <div class="ios-header-banner">
+      <!-- Status Bar -->
+      <div class="ios-status-bar">
+        <span class="ios-time">{{ currentTime }}</span>
+        <div class="ios-dynamic-island">
+          <div class="camera-lens"></div>
         </div>
-
-        <div class="hero-avatar-box">
-          <div class="avatar-3d">🏫</div>
-          <span class="status-indicator-dot"></span>
+        <div class="ios-status-icons">
+          <svg width="15" height="11" viewBox="0 0 18 12" fill="currentColor">
+            <rect x="0" y="8" width="3" height="4" rx="0.5" />
+            <rect x="5" y="6" width="3" height="6" rx="0.5" />
+            <rect x="10" y="3" width="3" height="9" rx="0.5" />
+            <rect x="15" y="0" width="3" height="12" rx="0.5" />
+          </svg>
+          <svg width="14" height="11" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3C7.5 3 3.7 4.9 1 8l2.5 3C5.7 8.6 8.7 7 12 7s6.3 1.6 8.5 4L23 8c-2.7-3.1-6.5-5-11-5zm0 6c-3.1 0-5.8 1.3-7.7 3.4l2.5 3C8.2 13.9 10 13 12 13s3.8.9 5.2 2.4l2.5-3C17.8 10.3 15.1 9 12 9zm0 6c-1.4 0-2.6.6-3.5 1.6L12 20l3.5-3.4C14.6 15.6 13.4 15 12 15z" />
+          </svg>
+          <svg width="20" height="11" viewBox="0 0 24 12" fill="currentColor">
+            <rect x="1" y="1" width="19" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <rect x="3" y="3" width="13" height="6" rx="1" />
+            <path d="M22 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
         </div>
       </div>
 
-      <!-- 3 KPI Counters Row -->
+      <!-- Navigation Top Bar -->
+      <div class="ios-nav-bar">
+        <button class="glass-icon-btn" title="خروج" @click="$emit('logout')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+
+        <h1 class="ios-nav-title">{{ schoolName }}</h1>
+
+        <div class="ios-nav-actions">
+          <button class="glass-icon-btn" title="تنبيهات" @click="$emit('open-notifications')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Overlapping Hero Card -->
+    <div class="ios-hero-card animate-fade-in">
+      <div class="hero-card-header">
+        <div class="hero-avatar-wrapper">
+          <div class="hero-avatar">🏫</div>
+          <span class="hero-status-dot"></span>
+        </div>
+
+        <div class="hero-info">
+          <h2 class="hero-title">{{ studentName }}</h2>
+          <p class="hero-subtitle">{{ gradeSection }}</p>
+          <p class="hero-tag">{{ department }}</p>
+        </div>
+      </div>
+
+      <!-- 3 Key Stats Counters (المواد الدراسية، الواجبات المعلقة، الامتحانات القادمة) -->
       <div class="hero-stats-row">
-        <div class="stat-col">
+        <div class="stat-item">
           <div class="stat-icon-val">
-            <span class="stat-emoji">📖</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
             <span class="stat-val">{{ subjectsCount }}</span>
           </div>
-          <span class="stat-label">المواد الدراسية</span>
+          <span class="stat-lbl">المواد الدراسية</span>
         </div>
 
         <div class="stat-divider"></div>
 
-        <div class="stat-col">
+        <div class="stat-item">
           <div class="stat-icon-val">
-            <span class="stat-emoji">📄</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
             <span class="stat-val">{{ pendingHomeworksCount }}</span>
           </div>
-          <span class="stat-label">الواجبات المعلقة</span>
+          <span class="stat-lbl">الواجبات المعلقة</span>
         </div>
 
         <div class="stat-divider"></div>
 
-        <div class="stat-col">
+        <div class="stat-item">
           <div class="stat-icon-val">
-            <span class="stat-emoji">📅</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
             <span class="stat-val">{{ upcomingExamsCount }}</span>
           </div>
-          <span class="stat-label">الامتحانات القادمة</span>
+          <span class="stat-lbl">الامتحانات القادمة</span>
         </div>
       </div>
     </div>
@@ -91,13 +113,15 @@
 </template>
 
 <script setup>
+import '@/assets/styles/student-design.css';
+
 const props = defineProps({
-  currentTime: { type: String, default: '3:27' },
+  currentTime: { type: String, default: '9:41' },
   schoolName: { type: String, default: 'مدرسة النور الإعدادية' },
   studentName: { type: String, default: 'أحمد خالد المصراتي' },
   gradeSection: { type: String, default: 'الصف الخامس - الشعبة (أ5)' },
   department: { type: String, default: 'قسم المرحلة الإعدادية والنموذجية' },
-  subjectsCount: { type: Number, default: 5 },
+  subjectsCount: { type: Number, default: 7 },
   pendingHomeworksCount: { type: Number, default: 4 },
   upcomingExamsCount: { type: Number, default: 1 }
 });
@@ -106,185 +130,5 @@ const emit = defineEmits(['logout', 'open-notifications']);
 </script>
 
 <style scoped>
-.dash-header-wrapper {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
-  padding: 12px 16px 28px;
-  border-radius: 0 0 28px 28px;
-  color: #ffffff;
-  position: relative;
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.25);
-}
-
-.ios-status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  opacity: 0.9;
-}
-
-.dynamic-island {
-  width: 90px;
-  height: 22px;
-  background-color: #000000;
-  border-radius: 14px;
-}
-
-.ios-icons {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.dash-nav-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.dash-school-title {
-  font-size: 20px;
-  font-weight: 800;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.nav-icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.nav-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
-  transform: scale(1.05);
-}
-
-.dash-hero-card {
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 20px 24px 16px;
-  color: #1e293b;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  position: relative;
-  z-index: 2;
-}
-
-.hero-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.hero-text-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.student-name {
-  font-size: 19px;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-}
-
-.grade-badge {
-  font-size: 13px;
-  font-weight: 700;
-  color: #4f46e5;
-  background: rgba(79, 70, 229, 0.08);
-  padding: 4px 10px;
-  border-radius: 12px;
-  width: fit-content;
-}
-
-.dept-text {
-  font-size: 12px;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.hero-avatar-box {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  position: relative;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 8px 16px rgba(79, 70, 229, 0.15);
-}
-
-.status-indicator-dot {
-  width: 12px;
-  height: 12px;
-  background-color: #22c55e;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-  position: absolute;
-  bottom: -2px;
-  left: -2px;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
-}
-
-/* 3 KPI Counters Row */
-.hero-stats-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 14px;
-  border-top: 1px dashed #e2e8f0;
-}
-
-.stat-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.stat-icon-val {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.stat-emoji {
-  font-size: 16px;
-}
-
-.stat-val {
-  font-size: 18px;
-  font-weight: 800;
-  color: #0f172a;
-}
-
-.stat-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #64748b;
-}
-
-.stat-divider {
-  width: 1px;
-  height: 28px;
-  background-color: #e2e8f0;
-}
+/* Importing student-design.css guarantees 100% design fidelity matching StudentDashboardView.vue */
 </style>

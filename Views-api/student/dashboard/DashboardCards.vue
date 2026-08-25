@@ -1,79 +1,78 @@
 <template>
-  <main class="cards-grid-section">
-    <div class="main-cards-grid">
-      <!-- 1. كارت الواجبات -->
-      <article class="nav-card homework-card" @click="navigateTo('/student/homeworks')">
-        <div class="card-glass-shine"></div>
-        <div class="card-badge warning">{{ pendingHomeworksCount }} معلق</div>
-        <div class="card-inner-body">
-          <h3 class="card-title">الواجبات</h3>
-          <p class="card-desc">متابعة المهام المطلوبة والواجبات اليومية</p>
-          <div class="card-action-btn">
-            <span>عرض المهام</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </div>
+  <main class="cards-container">
+    <!-- 1. الواجبات -->
+    <div class="card homework" @click="navigateTo('/student/homeworks')">
+      <img src="/images/واجبات.png" alt="الواجبات" class="card-bg" />
+      <div class="card-overlay"></div>
+      <div class="card-badge warning">{{ pendingHomeworksCount }} معلق</div>
+      <div class="card-content">
+        <h3>الواجبات</h3>
+        <p>متابعة المهام المطلوبة والواجبات اليومية</p>
+        <div class="card-link-btn">
+          <span>عرض المهام</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </div>
-        <div class="card-3d-illustration">🎒</div>
-      </article>
+      </div>
+    </div>
 
-      <!-- 2. كارت الامتحانات -->
-      <article class="nav-card exams-card" @click="navigateTo('/student/exams')">
-        <div class="card-glass-shine"></div>
-        <div class="card-badge danger">{{ upcomingExamsCount }} قادمة</div>
-        <div class="card-inner-body">
-          <h3 class="card-title">الامتحانات</h3>
-          <p class="card-desc">جدول الامتحانات والاختبارات الشهرية</p>
-          <div class="card-action-btn">
-            <span>عرض الجدول</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </div>
+    <!-- 2. الامتحانات -->
+    <div class="card exams" @click="navigateTo('/student/exams')">
+      <img src="/images/امتحانات.png" alt="الامتحانات" class="card-bg" />
+      <div class="card-overlay"></div>
+      <div class="card-badge danger">{{ upcomingExamsCount }} قادمة</div>
+      <div class="card-content">
+        <h3>الامتحانات</h3>
+        <p>جدول الامتحانات والاختبارات الشهرية</p>
+        <div class="card-link-btn">
+          <span>عرض الجدول</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </div>
-        <div class="card-3d-illustration">📚</div>
-      </article>
+      </div>
+    </div>
 
-      <!-- 3. كارت المواد الدراسية -->
-      <article class="nav-card subjects-card" @click="navigateTo('/student/subjects')">
-        <div class="card-glass-shine"></div>
-        <div class="card-badge info">{{ subjectsCount }} مواد</div>
-        <div class="card-inner-body">
-          <h3 class="card-title">المواد الدراسية</h3>
-          <p class="card-desc">المناهج والملخصات التعليمية المتاحة</p>
-          <div class="card-action-btn">
-            <span>استكشاف المواد</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </div>
+    <!-- 3. المواد الدراسية -->
+    <div class="card subjects" @click="navigateTo('/student/subjects')">
+      <img src="/images/مواد.png" alt="المواد الدراسية" class="card-bg" />
+      <div class="card-overlay"></div>
+      <div class="card-badge info">{{ subjectsCount }} مواد</div>
+      <div class="card-content">
+        <h3>المواد الدراسية</h3>
+        <p>المناهج والملخصات التعليمية المتاحة</p>
+        <div class="card-link-btn">
+          <span>استكشاف المواد</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </div>
-        <div class="card-3d-illustration">🔬</div>
-      </article>
+      </div>
+    </div>
 
-      <!-- 4. كارت الجدول الأسبوعي -->
-      <article class="nav-card schedule-card" @click="navigateTo('/student/schedule')">
-        <div class="card-glass-shine"></div>
-        <div class="card-badge success">اليوم: {{ currentDayName }}</div>
-        <div class="card-inner-body">
-          <h3 class="card-title">الجدول الأسبوعي</h3>
-          <p class="card-desc">توزيع الحصص اليومية والمعلمين</p>
-          <div class="card-action-btn">
-            <span>عرض الحصص</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </div>
+    <!-- 4. الجدول الأسبوعي -->
+    <div class="card schedule" @click="navigateTo('/student/schedule')">
+      <img src="/images/جدول.png" alt="الجدول الأسبوعي" class="card-bg" />
+      <div class="card-overlay"></div>
+      <div class="card-badge success">اليوم: {{ currentDayName }}</div>
+      <div class="card-content">
+        <h3>الجدول الأسبوعي</h3>
+        <p>توزيع الحصص اليومية والمعلمين</p>
+        <div class="card-link-btn">
+          <span>عرض الحصص</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </div>
-        <div class="card-3d-illustration">📅</div>
-      </article>
+      </div>
     </div>
   </main>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
+import '@/assets/styles/student-design.css';
 
 const props = defineProps({
   pendingHomeworksCount: { type: Number, default: 4 },
@@ -85,111 +84,12 @@ const props = defineProps({
 const router = useRouter();
 
 function navigateTo(path) {
-  router.push(path);
+  if (router) {
+    router.push(path);
+  }
 }
 </script>
 
 <style scoped>
-.cards-grid-section {
-  padding: 0 16px 32px;
-}
-
-.main-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.nav-card {
-  border-radius: 26px;
-  padding: 20px 16px;
-  position: relative;
-  overflow: hidden;
-  color: #ffffff;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
-}
-
-/* Card Gradients */
-.homework-card {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-}
-
-.exams-card {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-}
-
-.subjects-card {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-}
-
-.schedule-card {
-  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-}
-
-.card-badge {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 12px;
-  width: fit-content;
-  backdrop-filter: blur(10px);
-}
-
-.card-badge.warning { background: rgba(254, 243, 199, 0.25); color: #ffffff; }
-.card-badge.danger { background: rgba(254, 226, 226, 0.25); color: #ffffff; }
-.card-badge.info { background: rgba(224, 242, 254, 0.25); color: #ffffff; }
-.card-badge.success { background: rgba(209, 250, 229, 0.25); color: #ffffff; }
-
-.card-inner-body {
-  position: relative;
-  z-index: 2;
-  margin-top: 12px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: 800;
-  margin: 0 0 4px;
-}
-
-.card-desc {
-  font-size: 12px;
-  opacity: 0.9;
-  line-height: 1.3;
-  margin: 0 0 14px;
-}
-
-.card-action-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(8px);
-  padding: 6px 12px;
-  border-radius: 14px;
-  font-size: 12px;
-  font-weight: 700;
-  width: fit-content;
-}
-
-.card-3d-illustration {
-  position: absolute;
-  bottom: -6px;
-  left: -4px;
-  font-size: 64px;
-  opacity: 0.85;
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.15));
-  pointer-events: none;
-}
+/* Using student-design.css classes: cards-container, card, homework, exams, subjects, schedule, card-bg, card-overlay, card-badge, card-content, card-link-btn */
 </style>

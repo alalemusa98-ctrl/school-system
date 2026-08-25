@@ -327,11 +327,11 @@ const isModalOpen = ref(false);
 const selectedHw = ref(null);
 
 const subjectOptions = [
-  { id: 'math', name: 'الرياضيات', image: math3dImg, icon: '📐' },
-  { id: 'science', name: 'العلوم العامة', image: science3dImg, icon: '🔬' },
+  { id: 'math', name: 'الرياضيات', image: math3dImg },
+  { id: 'science', name: 'العلوم العامة', image: science3dImg },
   { id: 'arabic', name: 'اللغة العربية', icon: '📖' },
-  { id: 'english', name: 'اللغة الإنجليزية', image: english3dImg, icon: '🔤' },
-  { id: 'islamic', name: 'التربية الإسلامية', image: islamic3dImg, icon: '🕌' },
+  { id: 'english', name: 'اللغة الإنجليزية', image: english3dImg },
+  { id: 'islamic', name: 'التربية الإسلامية', image: islamic3dImg },
   { id: 'computer', name: 'الحاسوب والتقنية', icon: '💻' },
   { id: 'social', name: 'الدراسات الاجتماعية', icon: '🌍' }
 ];

@@ -7,7 +7,10 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      '@views-api': path.resolve(__dirname, '../Views-api'),
+      'vue': path.resolve(__dirname, './node_modules/vue'),
+      'vue-router': path.resolve(__dirname, './node_modules/vue-router')
     }
   },
   server: {

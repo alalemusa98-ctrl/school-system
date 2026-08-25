@@ -1083,10 +1083,10 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 18px 12px;
+  padding: 22px 12px;
   border-radius: 24px;
   background: #f8fafc;
-  border: 1px solid #f1f5f9;
+  border: 1.5px solid #f1f5f9;
   cursor: pointer;
   transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -1094,8 +1094,8 @@
 .action-squircle-card:hover {
   background: #ffffff;
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08);
-  border-color: #e2e8f0;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
 .action-squircle-card:active {
@@ -1115,38 +1115,38 @@
 }
 
 .squircle-icon-wrapper.cyan {
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-  box-shadow: 0 10px 22px -4px rgba(6, 182, 212, 0.45);
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.35);
 }
 
 .squircle-icon-wrapper.pink {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-  box-shadow: 0 10px 22px -4px rgba(236, 72, 153, 0.45);
+  background: linear-gradient(135deg, #d946ef 0%, #c026d3 100%);
+  box-shadow: 0 10px 22px rgba(192, 38, 211, 0.35);
 }
 
 .action-card-label {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
-  color: #1e293b;
-  margin: 0;
+  color: #0f172a;
+  margin: 2px 0 0 0;
   text-align: center;
 }
 
 .action-card-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 10px;
+  padding: 6px 14px;
+  border-radius: 14px;
 }
 
 .action-card-badge.cyan {
   background: #e0f2fe;
-  color: #0369a1;
+  color: #0284c7;
 }
 
 .action-card-badge.pink {
   background: #fce7f3;
-  color: #be185d;
+  color: #c026d3;
 }
 
 /* 3. Footer Row (Teacher Name) */

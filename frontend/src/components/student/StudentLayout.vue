@@ -3,7 +3,7 @@
     <!-- Header (iOS Mobile App Architecture) -->
     <header class="ios-header">
       <!-- Gradient Top Header Banner -->
-      <div class="ios-header-banner">
+      <div class="ios-header-banner" :style="bannerStyle">
         <!-- Status Bar -->
         <div class="ios-status-bar">
           <span class="ios-time">9:41</span>
@@ -78,7 +78,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import MobileNav from '../common/MobileNav.vue';
 
 defineProps({
@@ -88,6 +88,24 @@ defineProps({
 });
 
 const router = useRouter();
+const route = useRoute();
+
+const bannerStyle = computed(() => {
+  const path = route ? route.path : '';
+  if (path.includes('homeworks')) {
+    return { background: "linear-gradient(180deg, rgba(109, 40, 217, 0.78) 0%, rgba(91, 33, 182, 0.92) 100%), url('/images/student_bg.jpg') center center / cover no-repeat" };
+  }
+  if (path.includes('exams')) {
+    return { background: "linear-gradient(180deg, rgba(225, 29, 72, 0.78) 0%, rgba(190, 18, 60, 0.92) 100%), url('/images/student_bg.jpg') center center / cover no-repeat" };
+  }
+  if (path.includes('schedule')) {
+    return { background: "linear-gradient(180deg, rgba(16, 185, 129, 0.78) 0%, rgba(5, 150, 105, 0.92) 100%), url('/images/student_bg.jpg') center center / cover no-repeat" };
+  }
+  if (path.includes('subjects')) {
+    return { background: "linear-gradient(180deg, rgba(14, 165, 233, 0.78) 0%, rgba(2, 132, 199, 0.92) 100%), url('/images/student_bg.jpg') center center / cover no-repeat" };
+  }
+  return { background: "linear-gradient(180deg, rgba(79, 70, 229, 0.78) 0%, rgba(67, 56, 202, 0.92) 100%), url('/images/student_bg.jpg') center center / cover no-repeat" };
+});
 
 const userStr = localStorage.getItem('school_user');
 const user = userStr ? JSON.parse(userStr) : {};

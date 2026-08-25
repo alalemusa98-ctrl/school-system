@@ -81,6 +81,11 @@
 </template>
 
 <script setup>
+import mathImg from '@/assets/math_3d.jpg';
+import scienceImg from '@/assets/science_3d.jpg';
+import englishImg from '@/assets/english_3d.jpg';
+import islamicImg from '@/assets/islamic_3d.jpg';
+
 const props = defineProps({
   loading: { type: Boolean, default: false },
   selectedSubject: { type: Object, default: null },
@@ -90,17 +95,19 @@ const props = defineProps({
 const emit = defineEmits(['select-subject-tab']);
 
 function getSubjectImage(name) {
+  if (!name) return null;
+  if (name.includes('رياضيات')) return mathImg || '/images/math_3d.jpg';
+  if (name.includes('علوم')) return scienceImg || '/images/science_3d.jpg';
+  if (name.includes('إنجليز')) return englishImg || '/images/english_3d.jpg';
+  if (name.includes('إسلام')) return islamicImg || '/images/islamic_3d.jpg';
   return null;
 }
 
 function getSubjectIcon(name) {
   if (!name) return '📖';
-  if (name.includes('رياضيات')) return '📐';
-  if (name.includes('علوم')) return '🔬';
   if (name.includes('عرب')) return '📖';
-  if (name.includes('إنجليز')) return '🔤';
-  if (name.includes('إسلام')) return '🕌';
   if (name.includes('حاسوب')) return '💻';
+  if (name.includes('اجتماع')) return '🌍';
   return '📚';
 }
 </script>
@@ -136,21 +143,29 @@ function getSubjectIcon(name) {
 }
 
 .subj-ref-top-notch {
-  width: 52px;
-  height: 52px;
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(352deg, rgba(14, 165, 233, 0.62) 0%, rgba(186, 230, 253, 0.7) 100%);
   color: #ffffff;
-  font-size: 24px;
-  border-radius: 18px;
+  font-size: 22px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -26px;
+  top: -24px;
   left: 50%;
   transform: translateX(-50%);
-  border: 4px solid #f8fafc;
-  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.35);
+  border: 8px solid #fff;
+  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.35) inset;
+  overflow: hidden;
+}
+
+.subject-3d-icon-render {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .subj-ref-header-info {
@@ -180,64 +195,70 @@ function getSubjectIcon(name) {
 
 .action-squircle-card {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 16px 12px;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 24px;
+  padding: 22px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .action-squircle-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   background: #ffffff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  border-color: #bae6fd;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
 .squircle-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.25s ease;
 }
 
 .squircle-icon-wrapper.cyan {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.35);
 }
 
 .squircle-icon-wrapper.pink {
-  background: #fce7f3;
-  color: #db2777;
+  background: linear-gradient(135deg, #d946ef 0%, #c026d3 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(192, 38, 211, 0.35);
 }
 
 .action-card-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
-  color: #1e293b;
+  color: #0f172a;
+  margin-top: 2px;
 }
 
 .action-card-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
 }
 
 .action-card-badge.cyan {
   background: #e0f2fe;
-  color: #0369a1;
+  color: #0284c7;
 }
 
 .action-card-badge.pink {
   background: #fce7f3;
-  color: #be185d;
+  color: #c026d3;
 }
 
 .subj-ref-footer-row {

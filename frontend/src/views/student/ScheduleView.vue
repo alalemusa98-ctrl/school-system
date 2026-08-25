@@ -169,11 +169,9 @@ function getSubjectImage(name) {
 
 function getSubjectIcon(name) {
   if (!name) return '📚';
-  if (name.includes('رياضيات')) return '📐';
-  if (name.includes('علوم')) return '🔬';
   if (name.includes('عرب')) return '📖';
-  if (name.includes('إنكليز') || name.includes('إنجليزية') || name.includes('English')) return '🔤';
-  if (name.includes('إسلام')) return '🕌';
+  if (name.includes('حاسوب')) return '💻';
+  if (name.includes('اجتماع')) return '🌍';
   return '📚';
 }
 
