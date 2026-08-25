@@ -193,15 +193,17 @@
                 :cardsList="mockDashboardCards"
                 activeTab="current"
                 :loading="false"
-                title="إدارة الواجبات"
-                subtitle="متابعة ونشر الواجبات المدرسية"
+                :title="dynamicPageTitle"
+                :subtitle="dynamicPageSubtitle"
                 teacherName="أ. أحمد سالم"
                 subjectSpecialty="معلم الرياضيات"
                 assignedSectionsText="الصف الخامس (أ5 ، ب5) - الصف السادس (أ6)"
                 semesterInfo="الفصل الدراسي الأول 2026"
                 :homeworks="mockTeacherHomeworks"
+                :exams="mockTeacherExams"
                 :assignedSections="mockTeacherAssignedSections"
                 :currentCount="3"
+                :upcomingCount="3"
                 :archiveCount="1"
               />
             </div>
@@ -244,6 +246,10 @@ import TeacherHomeworkHeader from '@views-api/teacher/homeworks/TeacherHomeworkH
 import TeacherHomeworkTabs from '@views-api/teacher/homeworks/TeacherHomeworkTabs.vue';
 import TeacherHomeworkList from '@views-api/teacher/homeworks/TeacherHomeworkList.vue';
 
+import TeacherExamHeader from '@views-api/teacher/exams/TeacherExamHeader.vue';
+import TeacherExamTabs from '@views-api/teacher/exams/TeacherExamTabs.vue';
+import TeacherExamList from '@views-api/teacher/exams/TeacherExamList.vue';
+
 // Component Instance Mapping Table
 const componentInstances = {
   HomeworkHeader,
@@ -263,7 +269,10 @@ const componentInstances = {
   SubjectList,
   TeacherHomeworkHeader,
   TeacherHomeworkTabs,
-  TeacherHomeworkList
+  TeacherHomeworkList,
+  TeacherExamHeader,
+  TeacherExamTabs,
+  TeacherExamList
 };
 
 // Selection State
@@ -334,6 +343,16 @@ const rolePagesMap = {
         { id: 'TeacherHomeworkTabs', name: 'التابات والفلترة (TeacherHomeworkTabs)', file: 'TeacherHomeworkTabs.vue', desc: 'التحكم المقسم بين الواجبات الحالية والأرشيف مع زر النشر الفوري وكبسولات الشعب' },
         { id: 'TeacherHomeworkList', name: 'قائمة الواجبات والدراوير (TeacherHomeworkList)', file: 'TeacherHomeworkList.vue', desc: 'كروت الواجبات اليومية، دراوير التفاصيل، مودل إضافة واجب، ومودل الحل النموذجي' }
       ]
+    },
+    {
+      id: 'exams',
+      name: 'جدول الامتحانات',
+      icon: '📝',
+      components: [
+        { id: 'TeacherExamHeader', name: 'هيدر الامتحانات (TeacherExamHeader)', file: 'TeacherExamHeader.vue', desc: 'الهيدر العلوي لصفحة امتحانات المعلم مع كارت البروفايل العائم ومجسم 3D' },
+        { id: 'TeacherExamTabs', name: 'تابات وفلاتر الامتحانات (TeacherExamTabs)', file: 'TeacherExamTabs.vue', desc: 'التبديل بين الامتحانات القادمة والأرشيف مع زر جدولة امتحان جديد وشريط الشعب' },
+        { id: 'TeacherExamList', name: 'قائمة الامتحانات والدراوير (TeacherExamList)', file: 'TeacherExamList.vue', desc: 'كروت الامتحانات المجمعة بالتواريخ، دراوير التفاصيل الكاملة، ومودلات الجدولة والحل' }
+      ]
     }
   ],
   ADMIN: [
@@ -363,6 +382,32 @@ const currentComponentObj = computed(() => {
 const activeComponentInstance = computed(() => {
   const compId = selectedComponent.value;
   return componentInstances[compId] || HomeworkHeader;
+});
+
+const dynamicPageTitle = computed(() => {
+  if (selectedPage.value === 'exams') return 'جدول الامتحانات';
+  if (selectedPage.value === 'schedule') return 'الجدول الدراسي';
+  if (selectedPage.value === 'subjects') return 'المواد المقررة';
+  if (selectedPage.value === 'homeworks') {
+    return selectedRole.value === 'TEACHER' ? 'إدارة الواجبات' : 'الواجبات المدرسية';
+  }
+  return selectedRole.value === 'TEACHER' ? 'لوحة تحكم المعلم' : 'اللوحة الرئيسية';
+});
+
+const dynamicPageSubtitle = computed(() => {
+  if (selectedPage.value === 'exams') {
+    return selectedRole.value === 'TEACHER' 
+      ? 'إدارة وجدولة الامتحانات والاختبارات' 
+      : 'مواعيد الاختبارات والحلول الاسترشادية';
+  }
+  if (selectedPage.value === 'homeworks') {
+    return selectedRole.value === 'TEACHER' 
+      ? 'متابعة ونشر الواجبات المدرسية' 
+      : 'متابعة وتسليم الواجبات المدرسية';
+  }
+  if (selectedPage.value === 'schedule') return 'مواعيد الحصص والقاعات الأسبوعية';
+  if (selectedPage.value === 'subjects') return 'المناهج والكتب المدرسية التفاعلية';
+  return 'المتابعة اليومية والأنشطة المدرسية';
 });
 
 // Event Handlers
@@ -534,6 +579,87 @@ const mockTeacherHomeworks = ref([
     due_date: '2026-09-03',
     has_solution: 1,
     solution_text: 'معاني الكلمات:\n- عمّ: عن أي شيء.\n- مهاداً: ممهدة وميسرة للعيش.'
+  }
+]);
+
+const mockTeacherExams = ref([
+  {
+    id: 301,
+    title: 'امتحان العلوم العامة النصفي',
+    description: 'اختبار تحصيلي يشمل فصول الفيزياء والكيمياء والمفاهيم الأساسية.',
+    subject_name: 'العلوم العامة',
+    section_id: 1,
+    section_name: 'أ5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-30',
+    exam_time: '09:00 ص - 10:30 ص',
+    has_solution: 1,
+    solution_text: 'النموذج الاسترشادي:\nالسؤال الأول: (أ) تعريف الخلية، (ب) علل لما يأتي.\nتوزيع الدرجات: 20 درجة.'
+  },
+  {
+    id: 302,
+    title: 'امتحان الرياضيات الشهري الأول',
+    description: 'يشمل وحدات الجبر والعمليات الحسابية والمعادلات الخطية.',
+    subject_name: 'الرياضيات',
+    section_id: 2,
+    section_name: 'ب5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-30',
+    exam_time: '11:00 ص - 12:30 م',
+    has_solution: 0,
+    solution_text: ''
+  },
+  {
+    id: 303,
+    title: 'امتحان قواعد النحو والإملاء',
+    description: 'يشمل المبتدأ والخبر وكان وأخواتها وضبط الشواهد ص 40.',
+    subject_name: 'اللغة العربية',
+    section_id: 1,
+    section_name: 'أ5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-09-02',
+    exam_time: '08:30 ص - 10:00 ص',
+    has_solution: 1,
+    solution_text: 'نموذج الإجابة:\n1. الإعراب: الطالبُ اسم كان مرفوع.\n2. الاستخراج: الجملة الاسمية.'
+  },
+  {
+    id: 304,
+    title: 'امتحان الرياضيات المتقدمة',
+    description: 'اختبار نصف الفصل في المصفوفات ونظم المعادلات الخطية.',
+    subject_name: 'الرياضيات',
+    section_id: 3,
+    section_name: 'أ6',
+    grade_name: 'الصف السادس',
+    due_date: '2026-09-02',
+    exam_time: '10:30 ص - 12:00 م',
+    has_solution: 1,
+    solution_text: 'خطوات الحل وسلم توزيع الدرجات: 25 درجة.'
+  },
+  {
+    id: 305,
+    title: 'English Midterm Exam Unit 1-4',
+    description: 'Grammar, vocabulary, reading comprehension and writing paragraph.',
+    subject_name: 'اللغة الإنجليزية',
+    section_id: 3,
+    section_name: 'أ6',
+    grade_name: 'الصف السادس',
+    due_date: '2026-09-06',
+    exam_time: '09:00 AM - 10:30 AM',
+    has_solution: 1,
+    solution_text: 'Model Answer Key:\nPart 1: A, C, B, D\nPart 2: Passive voice transformation.'
+  },
+  {
+    id: 306,
+    title: 'امتحان التربية الإسلامية النصفي',
+    description: 'يشمل سور القرآن الكريم المقررة وأحاديث العقيدة والفقه.',
+    subject_name: 'التربية الإسلامية',
+    section_id: 2,
+    section_name: 'ب5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-09-06',
+    exam_time: '11:00 ص - 12:30 م',
+    has_solution: 1,
+    solution_text: 'توزيع الدرجات: 30 درجة على الحفظ والفهم وأحكام التلاوة.'
   }
 ]);
 </script>
