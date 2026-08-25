@@ -193,6 +193,16 @@
                 :cardsList="mockDashboardCards"
                 activeTab="current"
                 :loading="false"
+                title="إدارة الواجبات"
+                subtitle="متابعة ونشر الواجبات المدرسية"
+                teacherName="أ. أحمد سالم"
+                subjectSpecialty="معلم الرياضيات"
+                assignedSectionsText="الصف الخامس (أ5 ، ب5) - الصف السادس (أ6)"
+                semesterInfo="الفصل الدراسي الأول 2026"
+                :homeworks="mockTeacherHomeworks"
+                :assignedSections="mockTeacherAssignedSections"
+                :currentCount="3"
+                :archiveCount="1"
               />
             </div>
 
@@ -229,6 +239,11 @@ import SubjectHeader from '@views-api/student/subjects/SubjectHeader.vue';
 import SubjectTabs from '@views-api/student/subjects/SubjectTabs.vue';
 import SubjectList from '@views-api/student/subjects/SubjectList.vue';
 
+// Import Views-api Teacher Components
+import TeacherHomeworkHeader from '@views-api/teacher/homeworks/TeacherHomeworkHeader.vue';
+import TeacherHomeworkTabs from '@views-api/teacher/homeworks/TeacherHomeworkTabs.vue';
+import TeacherHomeworkList from '@views-api/teacher/homeworks/TeacherHomeworkList.vue';
+
 // Component Instance Mapping Table
 const componentInstances = {
   HomeworkHeader,
@@ -245,7 +260,10 @@ const componentInstances = {
   ScheduleList,
   SubjectHeader,
   SubjectTabs,
-  SubjectList
+  SubjectList,
+  TeacherHomeworkHeader,
+  TeacherHomeworkTabs,
+  TeacherHomeworkList
 };
 
 // Selection State
@@ -309,19 +327,12 @@ const rolePagesMap = {
   TEACHER: [
     {
       id: 'homeworks',
-      name: 'إدارة واجبات الطلاب',
+      name: 'إدارة الواجبات المدرسية',
       icon: '📚',
       components: [
-        { id: 'HomeworkHeader', name: 'هيدر معلم المادة (HomeworkHeader)', file: 'HomeworkHeader.vue', desc: 'واجهة المعلم لمتابعة الواجبات وإضافة التكليفات' },
-        { id: 'HomeworkList', name: 'قائمة تسليمات الطلاب (HomeworkList)', file: 'HomeworkList.vue', desc: 'قائمة تسليمات الطلاب وتقييم الحلول النموذجية' }
-      ]
-    },
-    {
-      id: 'dashboard',
-      name: 'لوحة المعلم الرئيسية',
-      icon: '👨‍🏫',
-      components: [
-        { id: 'DashboardHeader', name: 'هيدر كادر التدريس (DashboardHeader)', file: 'DashboardHeader.vue', desc: 'بيانات المعلم والمواد المكلف بتدريسها' }
+        { id: 'TeacherHomeworkHeader', name: 'هيدر المعلم (TeacherHomeworkHeader)', file: 'TeacherHomeworkHeader.vue', desc: 'الهيدر العلوي لشاشة المعلم مع شريط الحالة وكارت البروفايل والشعب المسندة والمؤشر الحي' },
+        { id: 'TeacherHomeworkTabs', name: 'التابات والفلترة (TeacherHomeworkTabs)', file: 'TeacherHomeworkTabs.vue', desc: 'التحكم المقسم بين الواجبات الحالية والأرشيف مع زر النشر الفوري وكبسولات الشعب' },
+        { id: 'TeacherHomeworkList', name: 'قائمة الواجبات والدراوير (TeacherHomeworkList)', file: 'TeacherHomeworkList.vue', desc: 'كروت الواجبات اليومية، دراوير التفاصيل، مودل إضافة واجب، ومودل الحل النموذجي' }
       ]
     }
   ],
@@ -418,6 +429,112 @@ const mockDashboardCards = ref([
   { id: 'exam', title: 'جدول الامتحانات', subtitle: 'التقييمات القادمة', icon: '📝', route: '/student/exams' },
   { id: 'sched', title: 'الجدول الأسبوعي', subtitle: 'الحصص والقاعات', icon: '📅', route: '/student/schedule' },
   { id: 'sub', title: 'المواد المقررة', subtitle: 'المناهج والكتب 3D', icon: '📘', route: '/student/subjects' }
+]);
+
+// Teacher Mock Data
+const mockTeacherAssignedSections = ref([
+  { id: 1, name: 'أ5', grade_name: 'الصف الخامس', pending_count: 3 },
+  { id: 2, name: 'ب5', grade_name: 'الصف الخامس', pending_count: 2 },
+  { id: 3, name: 'أ6', grade_name: 'الصف السادس', pending_count: 1 }
+]);
+
+const mockTeacherHomeworks = ref([
+  {
+    id: 101,
+    title: 'تمارين القسمة المطولة ص 45',
+    description: 'حل التمارين من رقم 1 إلى 8 في كراسة الواجب وكتاب التدريبات مع كتابة خطوات التحقق.',
+    subject_name: 'الرياضيات',
+    section_id: 1,
+    section_name: 'أ5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-30',
+    has_solution: 1,
+    solution_text: 'خطوات الحل النموذجية:\n1) 450 ÷ 5 = 90\n2) 720 ÷ 8 = 90\n3) التحقق عبر ضرب الناتج في المقسوم عليه.'
+  },
+  {
+    id: 102,
+    title: 'مسائل الضرب في عددين',
+    description: 'حل التدريب الثاني ص 38 مع توضيح خطوات إعادة التجميع بدقة.',
+    subject_name: 'الرياضيات',
+    section_id: 2,
+    section_name: 'ب5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-30',
+    has_solution: 0,
+    solution_text: ''
+  },
+  {
+    id: 103,
+    title: 'استكشاف تركيب الخلية الحية',
+    description: 'رسم وتحديد أجزاء الخلية النباتية والحيوانية وكتابة وظيفة الميتوكوندريا ص 56.',
+    subject_name: 'العلوم العامة',
+    section_id: 1,
+    section_name: 'أ5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-31',
+    has_solution: 1,
+    solution_text: 'الإجابة النموذجية:\n- الغشاء الخلوي: حماية وتنظيم.\n- الميتوكوندريا: إنتاج الطاقة.\n- الجدار الخلوي: في الخلية النباتية فقط.'
+  },
+  {
+    id: 104,
+    title: 'تطبيقات القوة والحركة والسرعة',
+    description: 'حل المسائل الحسابية في قانون السرعة = المسافة ÷ الزمن ص 64.',
+    subject_name: 'العلوم العامة',
+    section_id: 2,
+    section_name: 'ب5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-08-31',
+    has_solution: 0,
+    solution_text: ''
+  },
+  {
+    id: 105,
+    title: 'حل المعادلات الخطية من الدرجة الأولى',
+    description: 'إيجاد قيمة المتغير س في المسائل الخمس الأولى وتحديد مجموعة الحل ص 52.',
+    subject_name: 'الرياضيات',
+    section_id: 3,
+    section_name: 'أ6',
+    grade_name: 'الصف السادس',
+    due_date: '2026-09-02',
+    has_solution: 1,
+    solution_text: 'س = 15 - 7 = 8\nالتحقق: 8 + 7 = 15.'
+  },
+  {
+    id: 106,
+    title: 'قواعد إعراب الفاعل والمفعول به',
+    description: 'استخراج الفاعل والمفعول به وضبط أواخر الكلمات بالشكل التام ص 30.',
+    subject_name: 'اللغة العربية',
+    section_id: 1,
+    section_name: 'أ5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-09-02',
+    has_solution: 1,
+    solution_text: 'كتبَ الطالبُ الدرسَ:\n- الطالبُ: فاعل مرفوع بالضمة.\n- الدرسَ: مفعول به منصوب بالفتحة.'
+  },
+  {
+    id: 107,
+    title: 'Present Perfect Tense Exercises Unit 3',
+    description: 'Complete workbook exercises on page 24 with irregular verbs.',
+    subject_name: 'اللغة الإنجليزية',
+    section_id: 3,
+    section_name: 'أ6',
+    grade_name: 'الصف السادس',
+    due_date: '2026-09-03',
+    has_solution: 1,
+    solution_text: 'Answers:\n1. has visited\n2. have finished\n3. have already seen.'
+  },
+  {
+    id: 108,
+    title: 'حفظ وتفسير سورة النبأ من 1-15',
+    description: 'تسميع الآيات وحل أسئلة معاني المفردات والدروس المستفادة ص 18.',
+    subject_name: 'التربية الإسلامية',
+    section_id: 2,
+    section_name: 'ب5',
+    grade_name: 'الصف الخامس',
+    due_date: '2026-09-03',
+    has_solution: 1,
+    solution_text: 'معاني الكلمات:\n- عمّ: عن أي شيء.\n- مهاداً: ممهدة وميسرة للعيش.'
+  }
 ]);
 </script>
 
