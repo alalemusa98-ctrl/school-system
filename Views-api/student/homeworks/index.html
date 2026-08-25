@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صفحة الواجبات - الهيدر</title>
+  <!-- Google Fonts: Cairo & Inter for premium Arabic typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ===== Local Apple SF Arabic Typography System ===== */
+    @font-face {
+      font-family: 'SF Arabic';
+      src: url('../fonts/SF-Arabic-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'SF Arabic';
+      src: url('../fonts/SF-Arabic-SemiBold.ttf') format('truetype');
+      font-weight: 600 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ===== Design System Tokens & Base Styles ===== */
+    :root {
+      --primary-gradient: linear-gradient(180deg, rgba(79, 70, 229, 0.65) 0%, rgba(67, 56, 202, 0.82) 100%), url('images/student_bg.jpg') center center / cover no-repeat;
+      --bg-gradient: linear-gradient(180deg, rgba(248, 245, 255, 0.88) 0%, rgba(240, 247, 255, 0.92) 100%), url('images/student_bg.jpg') center top / cover no-repeat fixed;
+      --font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, 'SF Pro Arabic', 'Cairo', system-ui, sans-serif;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --indigo-primary: #4f46e5;
+      --indigo-accent: #6366f1;
+      --card-bg: #ffffff;
+      --status-active: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: #0f172a;
+      min-height: 100vh;
+      color: #2d2a4a;
+      direction: rtl;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+    }
+
+    /* Container replicating mobile viewport */
+    .mobile-frame {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .student-app-root {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+    }
+
+    /* ===== iOS Mobile Header & Hero Card System ===== */
+    .ios-header {
+      position: relative;
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    /* Gradient Banner Background */
+    .ios-header-banner {
+      background: var(--primary-gradient);
+      padding: 12px 18px 70px;
+      border-radius: 0 0 32px 32px;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(67, 56, 202, 0.3);
+      position: relative;
+    }
+
+    /* Status Bar inside Header Banner */
+    .ios-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      opacity: 0.95;
+    }
+
+    .ios-time {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .ios-dynamic-island {
+      width: 90px;
+      height: 18px;
+      background: #0f172a;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 8px;
+    }
+
+    .camera-lens {
+      width: 6px;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 50%;
+      border: 1px solid #334155;
+    }
+
+    .ios-status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+    }
+
+    /* Navigation Row inside Gradient */
+    .ios-nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 4px;
+    }
+
+    .ios-nav-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+    }
+
+    .ios-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Glassmorphic Frosted Icon Buttons */
+    .glass-icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .glass-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.32);
+      transform: scale(1.05);
+    }
+
+    .glass-icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Floating Overlapping Hero Card */
+    .ios-hero-card {
+      position: relative;
+      margin: -50px 16px 0;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 18px 20px;
+      box-shadow: 0 16px 40px -10px rgba(124, 92, 252, 0.16), 0 4px 14px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(241, 245, 249, 0.9);
+      z-index: 10;
+    }
+
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-avatar-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .hero-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+      border: 2px solid #ffffff;
+      box-shadow: 0 6px 16px rgba(124, 92, 252, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .hero-status-dot {
+      position: absolute;
+      bottom: 0;
+      left: -2px;
+      width: 12px;
+      height: 12px;
+      background-color: var(--status-active);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    }
+
+    .hero-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--indigo-primary);
+      background: rgba(79, 70, 229, 0.08);
+      padding: 3px 10px;
+      border-radius: 10px;
+      width: fit-content;
+    }
+
+    .hero-tag {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ===== Filter & Subject Tabs System (HomeworkTabs) ===== */
+    .hw-filter-section {
+      padding: 16px 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Segmented Control Styling */
+    .hw-segmented-control {
+      background: #f1f5f9;
+      border-radius: 18px;
+      padding: 4px;
+      display: flex;
+      gap: 4px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .hw-tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--font-family);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hw-tab-btn.active {
+      background: #ffffff;
+      color: #4f46e5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .hw-count-badge {
+      background-color: #ef4444;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Vertical Subject Pills Row */
+    .subject-pills-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .subject-pills-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sub-pill {
+      min-width: 72px;
+      padding: 12px 10px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      font-family: var(--font-family);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .sub-pill.active {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .sub-pill-icon-top {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .sub-pill-3d-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .sub-pill-name {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #475569;
+    }
+
+    .sub-pill.active .sub-pill-name {
+      color: #ffffff;
+    }
+
+    /* ===== Homework Main Container & List Architecture ===== */
+    .hw-container {
+      padding: 0 16px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .schedule-days-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Card Container with Top Notch */
+    .sched-ref-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px 20px 16px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid #f1f5f9;
+      margin-top: 14px;
+    }
+
+    .sched-ref-top-notch {
+      width: 54px;
+      height: 54px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 8px solid #fff;
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.35) inset ;
+    }
+
+    .sched-ref-header-info {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .sched-ref-day-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    /* 2-Column Grid Layout */
+    .exam-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .sched-subject-squircle {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sched-subject-squircle:hover {
+      transform: translateY(-3px);
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border-color: #c7d2fe;
+    }
+
+    .sched-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: #e0e7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      overflow: hidden;
+    }
+
+    .sched-icon-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sched-period-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .sched-period-tag.pending {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .sched-period-tag.success {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .sched-subject-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 2px 0 0;
+      text-align: center;
+    }
+
+    .sched-teacher-name {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .sched-ref-footer-date {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* ===== Drawer & Modal Overlays ===== */
+    .drawer-overlay, .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .drawer-overlay.active, .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .drawer-container {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 28px 28px 0 0;
+      padding: 24px;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .drawer-overlay.active .drawer-container {
+      transform: translateY(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .drawer-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drawer-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: #e0e7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      overflow: hidden;
+    }
+
+    .drawer-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .drawer-subtitle {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .drawer-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 16px;
+      font-family: var(--font-family);
+    }
+
+    .drawer-status-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    .drawer-status-banner.verified {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .drawer-info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .drawer-info-item {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .info-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .drawer-section {
+      margin-bottom: 18px;
+    }
+
+    .drawer-section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .drawer-text-content {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.6;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .drawer-solution-card {
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border: 1px solid #ddd6fe;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sol-card-info h5 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #4c1d95;
+      margin-bottom: 4px;
+    }
+
+    .sol-card-info p {
+      font-size: 11.5px;
+      color: #6d28d9;
+    }
+
+    .hw-ref-primary-pill-btn {
+      background: #4f46e5;
+      color: #ffffff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: var(--font-family);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .hw-ref-primary-pill-btn:hover {
+      background: #4338ca;
+      transform: scale(1.03);
+    }
+
+    /* Modal Dialog Specifics */
+    .modal-overlay {
+      align-items: center;
+      padding: 16px;
+    }
+
+    .modal-container {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-attachment-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      margin-top: 14px;
+    }
+
+    .file-icon {
+      font-size: 24px;
+    }
+
+    .file-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .file-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .file-meta {
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+    <div class="student-app-root">
+
+      <!-- Header (iOS Mobile App Architecture) -->
+      <header class="ios-header">
+        <!-- Gradient Top Header Banner -->
+        <div class="ios-header-banner">
+          <!-- Status Bar -->
+          <div class="ios-status-bar">
+            <span class="ios-time">9:41</span>
+            <div class="ios-dynamic-island">
+              <div class="camera-lens"></div>
+            </div>
+            <div class="ios-status-icons">
+              <!-- Signal Bars SVG -->
+              <svg width="15" height="11" viewBox="0 0 18 12" fill="currentColor">
+                <rect x="0" y="8" width="3" height="4" rx="0.5" />
+                <rect x="5" y="6" width="3" height="6" rx="0.5" />
+                <rect x="10" y="3" width="3" height="9" rx="0.5" />
+                <rect x="15" y="0" width="3" height="12" rx="0.5" />
+              </svg>
+              <!-- Wifi SVG -->
+              <svg width="14" height="11" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3C7.5 3 3.7 4.9 1 8l2.5 3C5.7 8.6 8.7 7 12 7s6.3 1.6 8.5 4L23 8c-2.7-3.1-6.5-5-11-5zm0 6c-3.1 0-5.8 1.3-7.7 3.4l2.5 3C8.2 13.9 10 13 12 13s3.8.9 5.2 2.4l2.5-3C17.8 10.3 15.1 9 12 9zm0 6c-1.4 0-2.6.6-3.5 1.6L12 20l3.5-3.4C14.6 15.6 13.4 15 12 15z" />
+              </svg>
+              <!-- Battery SVG -->
+              <svg width="20" height="11" viewBox="0 0 24 12" fill="currentColor">
+                <rect x="1" y="1" width="19" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <rect x="3" y="3" width="13" height="6" rx="1" />
+                <path d="M22 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Navigation Top Bar -->
+          <div class="ios-nav-bar">
+            <button class="glass-icon-btn" title="الرجوع">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+
+            <h1 class="ios-nav-title">تفاصيل الواجبات</h1>
+
+            <div class="ios-nav-actions">
+              <button class="glass-icon-btn" title="تصفية الفلاتر">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Overlapping Hero Card -->
+        <div class="ios-hero-card">
+          <div class="hero-card-header">
+            <div class="hero-avatar-wrapper">
+              <div class="hero-avatar">📚</div>
+              <span class="hero-status-dot"></span>
+            </div>
+
+            <div class="hero-info">
+              <h2 class="hero-title">متابعة الواجبات والحلول النموذجية</h2>
+              <span class="hero-subtitle">الصف الخامس - الشعبة (أ5)</span>
+              <span class="hero-tag">الفصل الدراسي الأول 2026</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Segmented Control & Subject Pills Section -->
+      <section class="hw-filter-section">
+        <!-- Segmented Control Tab Switcher -->
+        <div class="hw-segmented-control">
+          <button class="hw-tab-btn active" id="tab-current" onclick="switchTab('current')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>الواجبات الحالية</span>
+            <span class="hw-count-badge">5</span>
+          </button>
+
+          <button class="hw-tab-btn" id="tab-previous" onclick="switchTab('previous')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>الأرشيف</span>
+          </button>
+        </div>
+
+        <!-- Vertical Subject Pills Row -->
+        <div class="subject-pills-row">
+          <button class="sub-pill active" onclick="selectSubject(this)">
+            <div class="sub-pill-icon-top">🌟</div>
+            <span class="sub-pill-name">الكل</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <img src="images/math_3d.jpg" class="sub-pill-3d-img" alt="الرياضيات">
+            <span class="sub-pill-name">الرياضيات</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <img src="images/science_3d.jpg" class="sub-pill-3d-img" alt="العلوم العامة">
+            <span class="sub-pill-name">العلوم العامة</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <div class="sub-pill-icon-top">📖</div>
+            <span class="sub-pill-name">اللغة العربية</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <img src="images/english_3d.jpg" class="sub-pill-3d-img" alt="اللغة الإنجليزية">
+            <span class="sub-pill-name">اللغة الإنجليزية</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <img src="images/islamic_3d.jpg" class="sub-pill-3d-img" alt="التربية الإسلامية">
+            <span class="sub-pill-name">التربية الإسلامية</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <div class="sub-pill-icon-top">💻</div>
+            <span class="sub-pill-name">الحاسوب والتقنية</span>
+          </button>
+
+          <button class="sub-pill" onclick="selectSubject(this)">
+            <div class="sub-pill-icon-top">🌍</div>
+            <span class="sub-pill-name">الدراسات الاجتماعية</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Main Homework List Container (HomeworkList Component) -->
+      <main class="hw-container">
+        
+        <!-- Current Homeworks Tab View -->
+        <div id="view-current-homeworks" class="schedule-days-list">
+          
+          <!-- Group 1: Sunday Homeworks -->
+          <article class="sched-ref-card">
+            <!-- 1. Top Notch Badge -->
+            <div class="sched-ref-top-notch">1</div>
+
+            <!-- 2. Header Info -->
+            <div class="sched-ref-header-info">
+              <h3 class="sched-ref-day-title">واجبات يوم الأحد</h3>
+            </div>
+
+            <!-- 3. Squircle Grid (2 Columns) -->
+            <div class="exam-ref-grid">
+              <!-- Homework 1: Science -->
+              <div class="sched-subject-squircle" onclick="openDrawer('العلوم العامة', 'أ. فاطمة العبيدي', 'تم الإرسال', 'الأحد 16 أغسطس 2026', 'حل أسئلة الفصل الثالث من كتاب العلوم ص 45 إلى 48 وكتابة التقرير المعملي حول التفاعلات الكيميائية.', 'images/science_3d.jpg', true, 'الحل_النموذجي_العلوم_ف3.pdf')">
+                <div class="sched-icon-box">
+                  <img src="images/science_3d.jpg" alt="العلوم">
+                </div>
+                <span class="sched-period-tag">تم الإرسال</span>
+                <h4 class="sched-subject-name">العلوم العامة</h4>
+                <span class="sched-teacher-name">أ. فاطمة العبيدي</span>
+              </div>
+
+              <!-- Homework 2: Math -->
+              <div class="sched-subject-squircle" onclick="openDrawer('الرياضيات', 'أ. أحمد سالم', 'معلق', 'الأحد 16 أغسطس 2026', 'تمارين الهندسة وحساب المساحات في الصفحة 82 - أرقام الأسئلة المحددة: 1, 3, 5, 7.', 'images/math_3d.jpg', true, 'الحل_النموذجي_الرياضيات.pdf')">
+                <div class="sched-icon-box">
+                  <img src="images/math_3d.jpg" alt="الرياضيات">
+                </div>
+                <span class="sched-period-tag pending">معلق</span>
+                <h4 class="sched-subject-name">الرياضيات</h4>
+                <span class="sched-teacher-name">أ. أحمد سالم</span>
+              </div>
+            </div>
+
+            <!-- 4. Footer Date -->
+            <div class="sched-ref-footer-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>تاريخ التسليم: الأحد 16 أغسطس 2026</span>
+            </div>
+          </article>
+
+          <!-- Group 2: Tuesday Homeworks -->
+          <article class="sched-ref-card">
+            <!-- 1. Top Notch Badge -->
+            <div class="sched-ref-top-notch">2</div>
+
+            <!-- 2. Header Info -->
+            <div class="sched-ref-header-info">
+              <h3 class="sched-ref-day-title">واجبات يوم الثلاثاء</h3>
+            </div>
+
+            <!-- 3. Squircle Grid (2 Columns) -->
+            <div class="exam-ref-grid">
+              <!-- Homework 3: English -->
+              <div class="sched-subject-squircle" onclick="openDrawer('اللغة الإنجليزية', 'أ. سارة الحكيم', 'معلق', 'الثلاثاء 18 أغسطس 2026', 'Writing unit 4 essay about environmental protection and renewable energy (150 words).', 'images/english_3d.jpg', true, 'English_Unit4_Model_Solution.pdf')">
+                <div class="sched-icon-box">
+                  <img src="images/english_3d.jpg" alt="الإنجليزية">
+                </div>
+                <span class="sched-period-tag pending">معلق</span>
+                <h4 class="sched-subject-name">اللغة الإنجليزية</h4>
+                <span class="sched-teacher-name">أ. سارة الحكيم</span>
+              </div>
+
+              <!-- Homework 4: Islamic -->
+              <div class="sched-subject-squircle" onclick="openDrawer('التربية الإسلامية', 'أ. عبد الله منصور', 'تم الإرسال', 'الثلاثاء 18 أغسطس 2026', 'حفظ وحل تمرين أحكام التجويد لسورة الملك من الآية 1 إلى 12 والتسميع في الفصل.', 'images/islamic_3d.jpg', true, 'تفسير_وأحكام_سورة_الملك.pdf')">
+                <div class="sched-icon-box">
+                  <img src="images/islamic_3d.jpg" alt="الإسلامية">
+                </div>
+                <span class="sched-period-tag">تم الإرسال</span>
+                <h4 class="sched-subject-name">التربية الإسلامية</h4>
+                <span class="sched-teacher-name">أ. عبد الله منصور</span>
+              </div>
+            </div>
+
+            <!-- 4. Footer Date -->
+            <div class="sched-ref-footer-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>تاريخ التسليم: الثلاثاء 18 أغسطس 2026</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Archive Homeworks Tab View (Hidden by default) -->
+        <div id="view-archive-homeworks" class="schedule-days-list" style="display: none;">
+          <article class="sched-ref-card">
+            <div class="sched-ref-top-notch">1</div>
+            <div class="sched-ref-header-info">
+              <h3 class="sched-ref-day-title">أرشيف واجبات الأسبوع الماضي</h3>
+            </div>
+            <div class="exam-ref-grid">
+              <div class="sched-subject-squircle" onclick="openDrawer('اللغة العربية', 'أ. محمود الرشيد', 'مكتمل', 'الأحد 9 أغسطس 2026', 'إعراب وتلخيص النص الأدبي وحل تدريبات البلاغة.', '📖', true, 'الحل_النموذجي_اللغة_العربية.pdf')">
+                <div class="sched-icon-box">📖</div>
+                <span class="sched-period-tag success">10 / 10</span>
+                <h4 class="sched-subject-name">اللغة العربية</h4>
+                <span class="sched-teacher-name">أ. محمود الرشيد</span>
+              </div>
+
+              <div class="sched-subject-squircle" onclick="openDrawer('الحاسوب والتقنية', 'أ. عمر الخالد', 'مكتمل', 'الإثنين 10 أغسطس 2026', 'إنشاء مشروع تطبيق ويب بسيط باستخدام HTML و CSS.', '💻', true, 'مشروع_الحاسوب_النموذجي.pdf')">
+                <div class="sched-icon-box">💻</div>
+                <span class="sched-period-tag success">9.5 / 10</span>
+                <h4 class="sched-subject-name">الحاسوب والتقنية</h4>
+                <span class="sched-teacher-name">أ. عمر الخالد</span>
+              </div>
+            </div>
+            <div class="sched-ref-footer-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>تاريخ الأرشيف: 10 أغسطس 2026</span>
+            </div>
+          </article>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Side Drawer Overlay for Homework Details -->
+  <div id="homework-drawer" class="drawer-overlay" onclick="closeDrawerOnBg(event)">
+    <div class="drawer-container">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <div class="drawer-icon-box" id="drawer-icon">📚</div>
+          <div>
+            <h3 class="drawer-title" id="drawer-title">تفاصيل الواجب المدرسي</h3>
+            <span class="drawer-subtitle" id="drawer-subtitle">مادة علوم • إعداد أستاذ المادة</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closeDrawer()">✕</button>
+      </div>
+
+      <div class="drawer-status-banner" id="drawer-status-banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="drawer-status-text">واجب معلق - مطلوب إنجازه وتسليمه</span>
+      </div>
+
+      <div class="drawer-info-grid">
+        <div class="drawer-info-item">
+          <span class="info-label">📅 تاريخ التسليم الأقصى</span>
+          <span class="info-val" id="drawer-due-date">16 أغسطس 2026</span>
+        </div>
+        <div class="drawer-info-item">
+          <span class="info-label">👨‍🏫 الأستاذ المسؤول</span>
+          <span class="info-val" id="drawer-teacher">أ. فاطمة العبيدي</span>
+        </div>
+      </div>
+
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">📌 المطلـوب في الواجب المدرسي:</h4>
+        <p class="drawer-text-content" id="drawer-description">
+          يرجى حل تمارين الواجب المحددة بالكامل وإرسال الإجابة قبل تاريخ التسليم الأقصى.
+        </p>
+      </div>
+
+      <div class="drawer-solution-card">
+        <div class="sol-card-info">
+          <h5>📖 الحل النموذجي المعتمد</h5>
+          <p>ملف PDF يحتوي على خطوات الحل والإجابة النموذجية المعتمدة.</p>
+        </div>
+        <button class="hw-ref-primary-pill-btn" onclick="openSolutionModal()">
+          عرض الحل النموذجي ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Solution Dialog Overlay -->
+  <div id="solution-modal" class="modal-overlay" onclick="closeModalOnBg(event)">
+    <div class="modal-container">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <div class="drawer-icon-box">💡</div>
+          <div>
+            <h3 class="drawer-title" id="modal-title">الحل النموذجي المعتمد</h3>
+            <span class="drawer-subtitle" id="modal-subtitle">مادة العلوم العامة • إعداد أستاذ المادة</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closeSolutionModal()">✕</button>
+      </div>
+
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">📌 مفردات وخطوات الحل النموذجي المعتمد:</h4>
+        <div class="drawer-text-content">
+          <p style="margin-bottom: 6px;">1. صياغة القواعد الأساسية والإجابة النموذجية المعتمدة للمادة.</p>
+          <p>2. توزيع الدرجات التفصيلية والخطوات الواجب إتباعها.</p>
+        </div>
+      </div>
+
+      <div class="modal-attachment-box">
+        <span class="file-icon">📄</span>
+        <div class="file-details">
+          <span class="file-name" id="modal-filename">الحل_النموذجي_المعتمد.pdf</span>
+          <span class="file-meta">ملف PDF شامل يحتوي على الإجابات النموذجية (1.8 MB)</span>
+        </div>
+        <button class="hw-ref-primary-pill-btn" onclick="alert('جاري تحميل ملف الحل النموذجي...')">
+          تحميل
+        </button>
+      </div>
+
+      <div style="margin-top: 18px; display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="drawer-close-btn" style="width: auto; padding: 0 16px; border-radius: 12px;" onclick="closeSolutionModal()">إغلاق</button>
+        <button class="hw-ref-primary-pill-btn" onclick="alert('جاري تحميل ملف الحل النموذجي...')">
+          تحميل الحل (PDF)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentActiveHomework = {};
+
+    function switchTab(tabType) {
+      const currentBtn = document.getElementById('tab-current');
+      const previousBtn = document.getElementById('tab-previous');
+      const currentView = document.getElementById('view-current-homeworks');
+      const archiveView = document.getElementById('view-archive-homeworks');
+
+      if (tabType === 'current') {
+        currentBtn.classList.add('active');
+        previousBtn.classList.remove('active');
+        currentView.style.display = 'flex';
+        archiveView.style.display = 'none';
+      } else {
+        previousBtn.classList.add('active');
+        currentBtn.classList.remove('active');
+        currentView.style.display = 'none';
+        archiveView.style.display = 'flex';
+      }
+    }
+
+    function selectSubject(btnElement) {
+      const allPills = document.querySelectorAll('.sub-pill');
+      allPills.forEach(pill => pill.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    function openDrawer(subject, teacher, status, dueDate, desc, iconSrc, hasSol, filename) {
+      currentActiveHomework = { subject, teacher, status, dueDate, desc, iconSrc, hasSol, filename };
+      
+      const drawer = document.getElementById('homework-drawer');
+      const titleEl = document.getElementById('drawer-title');
+      const subTitleEl = document.getElementById('drawer-subtitle');
+      const iconEl = document.getElementById('drawer-icon');
+      const bannerEl = document.getElementById('drawer-status-banner');
+      const statusTextEl = document.getElementById('drawer-status-text');
+      const dueEl = document.getElementById('drawer-due-date');
+      const teacherEl = document.getElementById('drawer-teacher');
+      const descEl = document.getElementById('drawer-description');
+
+      titleEl.innerText = `واجب مادة ${subject}`;
+      subTitleEl.innerText = `مادة ${subject} • إعداد ${teacher}`;
+      
+      if (iconSrc.includes('.jpg') || iconSrc.includes('.png')) {
+        iconEl.innerHTML = `<img src="${iconSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" alt="">`;
+      } else {
+        iconEl.innerText = iconSrc;
+      }
+
+      if (status === 'تم الإرسال' || status === 'مكتمل') {
+        bannerEl.className = 'drawer-status-banner verified';
+        statusTextEl.innerText = 'تم إرسال الواجب وتسليمه بنجاح';
+      } else {
+        bannerEl.className = 'drawer-status-banner';
+        statusTextEl.innerText = 'واجب معلق - مطلوب إنجازه وتسليمه';
+      }
+
+      dueEl.innerText = dueDate;
+      teacherEl.innerText = teacher;
+      descEl.innerText = desc;
+
+      drawer.classList.add('active');
+    }
+
+    function closeDrawer() {
+      document.getElementById('homework-drawer').classList.remove('active');
+    }
+
+    function closeDrawerOnBg(e) {
+      if (e.target.id === 'homework-drawer') {
+        closeDrawer();
+      }
+    }
+
+    function openSolutionModal() {
+      const modal = document.getElementById('solution-modal');
+      document.getElementById('modal-title').innerText = `الحل النموذجي: ${currentActiveHomework.subject || ''}`;
+      document.getElementById('modal-subtitle').innerText = `مادة ${currentActiveHomework.subject || ''} • إعداد ${currentActiveHomework.teacher || ''}`;
+      document.getElementById('modal-filename').innerText = currentActiveHomework.filename || 'الحل_النموذجي_المعتمد.pdf';
+      modal.classList.add('active');
+    }
+
+    function closeSolutionModal() {
+      document.getElementById('solution-modal').classList.remove('active');
+    }
+
+    function closeModalOnBg(e) {
+      if (e.target.id === 'solution-modal') {
+        closeSolutionModal();
+      }
+    }
+  </script>
+
+</body>
+</html>
