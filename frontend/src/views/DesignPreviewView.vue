@@ -214,6 +214,9 @@
                 :homeworks="mockTeacherHomeworks"
                 :exams="mockTeacherExams"
                 :assignedSections="mockTeacherAssignedSections"
+                :assignedSectionsCount="3"
+                :activeHomeworksCount="8"
+                :scheduledExamsCount="3"
                 :currentCount="3"
                 :upcomingCount="3"
                 :archiveCount="1"
@@ -254,6 +257,10 @@ import SubjectTabs from '@views-api/student/subjects/SubjectTabs.vue';
 import SubjectList from '@views-api/student/subjects/SubjectList.vue';
 
 // Import Views-api Teacher Components
+import TeacherDashboardHeader from '@views-api/teacher/dashboard/TeacherDashboardHeader.vue';
+import TeacherDashboardDays from '@views-api/teacher/dashboard/TeacherDashboardDays.vue';
+import TeacherDashboardCards from '@views-api/teacher/dashboard/TeacherDashboardCards.vue';
+
 import TeacherHomeworkHeader from '@views-api/teacher/homeworks/TeacherHomeworkHeader.vue';
 import TeacherHomeworkTabs from '@views-api/teacher/homeworks/TeacherHomeworkTabs.vue';
 import TeacherHomeworkList from '@views-api/teacher/homeworks/TeacherHomeworkList.vue';
@@ -287,6 +294,9 @@ const componentInstances = {
   SubjectHeader,
   SubjectTabs,
   SubjectList,
+  TeacherDashboardHeader,
+  TeacherDashboardDays,
+  TeacherDashboardCards,
   TeacherHomeworkHeader,
   TeacherHomeworkTabs,
   TeacherHomeworkList,
@@ -366,6 +376,16 @@ const rolePagesMap = {
     }
   ],
   TEACHER: [
+    {
+      id: 'dashboard',
+      name: 'لوحة التحكم الرئيسية',
+      icon: '🏠',
+      components: [
+        { id: 'TeacherDashboardHeader', name: 'هيدر المعلم والبروفايل (TeacherDashboardHeader)', file: 'TeacherDashboardHeader.vue', desc: 'الهيدر العلوي للوحة تحكم المعلم مع شريط الحالة، كارت البروفايل العائم، وعدادات الفصول والواجبات والامتحانات' },
+        { id: 'TeacherDashboardDays', name: 'شريط الأيام الأسبوعي (TeacherDashboardDays)', file: 'TeacherDashboardDays.vue', desc: 'شريط الأيام الأسبوعي التفاعلي لاختيار اليوم وتصفية الحصص والمتابعة' },
+        { id: 'TeacherDashboardCards', name: 'كروت الشبكة الرئيسية (TeacherDashboardCards)', file: 'TeacherDashboardCards.vue', desc: 'شبكة بطاقات الملاحة السريعة للمعلم (الواجبات، الامتحانات، الفصول، الجدول الأسبوعي)' }
+      ]
+    },
     {
       id: 'homeworks',
       name: 'إدارة الواجبات المدرسية',
