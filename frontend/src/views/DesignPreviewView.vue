@@ -1,5 +1,5 @@
 <template>
-  <div class="design-preview-root">
+  <div :class="['design-preview-root', themeMode]">
     <!-- Ambient Background Lighting -->
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
@@ -16,13 +16,25 @@
           <p class="sub-title">اختر المستخدم ثم الصفحة المطلوبة لعرض المكونات والـ .vue Components حياً</p>
         </div>
 
-        <button class="back-to-login-btn" @click="$router.push('/login')" title="الرجوع لصفحة تسجيل الدخول">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          <span>الرجوع لتسجيل الدخول</span>
-        </button>
+        <div class="header-actions-group">
+          <!-- Light / Dark Mode Toggle Button -->
+          <button 
+            class="theme-toggle-btn" 
+            @click="toggleTheme" 
+            :title="themeMode === 'dark' ? 'التحويل إلى الوضع الفاتح (Light Mode)' : 'التحويل إلى الوضع الليلي (Dark Mode)'"
+          >
+            <span v-if="themeMode === 'dark'" class="theme-icon">☀️ الوضع الفاتح</span>
+            <span v-else class="theme-icon">🌙 الوضع الليلي</span>
+          </button>
+
+          <button class="back-to-login-btn" @click="$router.push('/login')" title="الرجوع لصفحة تسجيل الدخول">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>الرجوع لتسجيل الدخول</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -289,11 +301,17 @@ const componentInstances = {
   TeacherScheduleList
 };
 
-// Selection State
+// Selection & Theme State
+const themeMode = ref(localStorage.getItem('preview_theme') || 'dark'); // 'dark' or 'light'
 const selectedRole = ref('STUDENT');
 const selectedPage = ref('homeworks');
 const selectedComponent = ref('HomeworkHeader');
 const viewMode = ref('mobile'); // 'mobile' or 'desktop'
+
+function toggleTheme() {
+  themeMode.value = themeMode.value === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('preview_theme', themeMode.value);
+}
 
 // Role Definitions & Pages
 const rolePagesMap = {
@@ -829,6 +847,35 @@ const mockTeacherSubjects = ref([
   margin: 0;
 }
 
+.header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
 .back-to-login-btn {
   display: flex;
   align-items: center;
@@ -1230,5 +1277,188 @@ const mockTeacherSubjects = ref([
 
 .live-component-wrapper {
   width: 100%;
+}
+
+/* =========================================================
+   LIGHT MODE STYLING OVERRIDES (الوضع الفاتح)
+   ========================================================= */
+.design-preview-root.light {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  color: #0f172a;
+}
+
+.design-preview-root.light .glow-orb {
+  opacity: 0.12;
+}
+
+.design-preview-root.light .preview-header {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.design-preview-root.light .main-title {
+  color: #0f172a;
+}
+
+.design-preview-root.light .sub-title {
+  color: #64748b;
+}
+
+.design-preview-root.light .brand-badge {
+  background: rgba(99, 102, 241, 0.1);
+  color: #4f46e5;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.design-preview-root.light .theme-toggle-btn {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.design-preview-root.light .theme-toggle-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.design-preview-root.light .back-to-login-btn {
+  background: #ffffff;
+  color: #334155;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.design-preview-root.light .back-to-login-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.design-preview-root.light .step-section {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.design-preview-root.light .step-title {
+  color: #0f172a;
+}
+
+.design-preview-root.light .role-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.design-preview-root.light .role-card:hover {
+  background: #f8fafc;
+  border-color: #818cf8;
+}
+
+.design-preview-root.light .role-card.active {
+  background: linear-gradient(135deg, #eff6ff 0%, #ede9fe 100%);
+  border-color: #6366f1;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+}
+
+.design-preview-root.light .role-name {
+  color: #0f172a;
+}
+
+.design-preview-root.light .role-desc {
+  color: #64748b;
+}
+
+.design-preview-root.light .page-pill-btn {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #475569;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.design-preview-root.light .page-pill-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.design-preview-root.light .page-pill-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.25);
+}
+
+.design-preview-root.light .device-toggle-group {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.design-preview-root.light .device-btn {
+  color: #64748b;
+}
+
+.design-preview-root.light .device-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.design-preview-root.light .comp-subtab-btn {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #475569;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.design-preview-root.light .comp-subtab-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #c084fc;
+}
+
+.design-preview-root.light .comp-subtab-btn.active {
+  background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.25);
+}
+
+.design-preview-root.light .comp-file-tag {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.design-preview-root.light .file-path-banner {
+  background: #ffffff;
+  border-color: #d8b4fe;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.design-preview-root.light .path-label {
+  color: #64748b;
+}
+
+.design-preview-root.light .path-code {
+  color: #7e22ce;
+}
+
+.design-preview-root.light .path-desc {
+  color: #334155;
+}
+
+.design-preview-root.light .component-render-canvas {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.design-preview-root.light .mobile-iphone-shell {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12), 0 0 0 12px #334155;
+}
+
+.design-preview-root.light .desktop-shell {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
 }
 </style>
