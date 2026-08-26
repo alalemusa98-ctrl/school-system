@@ -189,7 +189,7 @@
                 :groupedCurrentHomeworks="mockHomeworks"
                 :groupedExams="mockExams"
                 :scheduleDays="mockSchedule"
-                :subjectsList="mockSubjects"
+                :subjectsList="selectedRole === 'TEACHER' ? mockTeacherSubjects : mockSubjects"
                 :cardsList="mockDashboardCards"
                 activeTab="current"
                 :loading="false"
@@ -250,6 +250,14 @@ import TeacherExamHeader from '@views-api/teacher/exams/TeacherExamHeader.vue';
 import TeacherExamTabs from '@views-api/teacher/exams/TeacherExamTabs.vue';
 import TeacherExamList from '@views-api/teacher/exams/TeacherExamList.vue';
 
+import TeacherSubjectHeader from '@views-api/teacher/subjects/TeacherSubjectHeader.vue';
+import TeacherSubjectTabs from '@views-api/teacher/subjects/TeacherSubjectTabs.vue';
+import TeacherSubjectList from '@views-api/teacher/subjects/TeacherSubjectList.vue';
+
+import TeacherScheduleHeader from '@views-api/teacher/schedule/TeacherScheduleHeader.vue';
+import TeacherScheduleTabs from '@views-api/teacher/schedule/TeacherScheduleTabs.vue';
+import TeacherScheduleList from '@views-api/teacher/schedule/TeacherScheduleList.vue';
+
 // Component Instance Mapping Table
 const componentInstances = {
   HomeworkHeader,
@@ -272,7 +280,13 @@ const componentInstances = {
   TeacherHomeworkList,
   TeacherExamHeader,
   TeacherExamTabs,
-  TeacherExamList
+  TeacherExamList,
+  TeacherSubjectHeader,
+  TeacherSubjectTabs,
+  TeacherSubjectList,
+  TeacherScheduleHeader,
+  TeacherScheduleTabs,
+  TeacherScheduleList
 };
 
 // Selection State
@@ -353,6 +367,24 @@ const rolePagesMap = {
         { id: 'TeacherExamTabs', name: 'تابات وفلاتر الامتحانات (TeacherExamTabs)', file: 'TeacherExamTabs.vue', desc: 'التبديل بين الامتحانات القادمة والأرشيف مع زر جدولة امتحان جديد وشريط الشعب' },
         { id: 'TeacherExamList', name: 'قائمة الامتحانات والدراوير (TeacherExamList)', file: 'TeacherExamList.vue', desc: 'كروت الامتحانات المجمعة بالتواريخ، دراوير التفاصيل الكاملة، ومودلات الجدولة والحل' }
       ]
+    },
+    {
+      id: 'subjects',
+      name: 'الفصول الدراسية',
+      icon: '🏫',
+      components: [
+        { id: 'TeacherSubjectHeader', name: 'هيدر الفصول والشعب (TeacherSubjectHeader)', file: 'TeacherSubjectHeader.vue', desc: 'الهيدر العلوي لشاشة الفصول مع كارت البروفايل العائم ومجسم الكتب 3D' },
+        { id: 'TeacherSubjectList', name: 'قائمة الفصول والدراوير (TeacherSubjectList)', file: 'TeacherSubjectList.vue', desc: 'كروت الفصول والشعب مع الواجبات والامتحانات ودراوير تفاصيل الشعب والطلاب' }
+      ]
+    },
+    {
+      id: 'schedule',
+      name: 'الجدول الدراسي الأسبوعي',
+      icon: '📅',
+      components: [
+        { id: 'TeacherScheduleHeader', name: 'هيدر جدول المعلم (TeacherScheduleHeader)', file: 'TeacherScheduleHeader.vue', desc: 'الهيدر العلوي لجدول الحصص الأسبوعي مع البروفايل والمؤشر الحي' },
+        { id: 'TeacherScheduleList', name: 'جدول الحصص والقاعات (TeacherScheduleList)', file: 'TeacherScheduleList.vue', desc: 'كروت الحصص الموزعة على أيام الأسبوع الخمسة مع الشعب والمقررات ودراوير التفاصيل' }
+      ]
     }
   ],
   ADMIN: [
@@ -387,7 +419,9 @@ const activeComponentInstance = computed(() => {
 const dynamicPageTitle = computed(() => {
   if (selectedPage.value === 'exams') return 'جدول الامتحانات';
   if (selectedPage.value === 'schedule') return 'الجدول الدراسي';
-  if (selectedPage.value === 'subjects') return 'المواد المقررة';
+  if (selectedPage.value === 'subjects') {
+    return selectedRole.value === 'TEACHER' ? 'الفصول الدراسية' : 'المواد المقررة';
+  }
   if (selectedPage.value === 'homeworks') {
     return selectedRole.value === 'TEACHER' ? 'إدارة الواجبات' : 'الواجبات المدرسية';
   }
@@ -405,8 +439,12 @@ const dynamicPageSubtitle = computed(() => {
       ? 'متابعة ونشر الواجبات المدرسية' 
       : 'متابعة وتسليم الواجبات المدرسية';
   }
+  if (selectedPage.value === 'subjects') {
+    return selectedRole.value === 'TEACHER' 
+      ? 'إدارة ومتابعة الفصول والشعب المسندة' 
+      : 'المناهج والكتب المدرسية التفاعلية';
+  }
   if (selectedPage.value === 'schedule') return 'مواعيد الحصص والقاعات الأسبوعية';
-  if (selectedPage.value === 'subjects') return 'المناهج والكتب المدرسية التفاعلية';
   return 'المتابعة اليومية والأنشطة المدرسية';
 });
 
@@ -660,6 +698,39 @@ const mockTeacherExams = ref([
     exam_time: '11:00 ص - 12:30 م',
     has_solution: 1,
     solution_text: 'توزيع الدرجات: 30 درجة على الحفظ والفهم وأحكام التلاوة.'
+  }
+]);
+
+const mockTeacherSubjects = ref([
+  {
+    id: 1,
+    name: 'أ5',
+    grade_name: 'الصف الخامس',
+    subject_name: 'الرياضيات',
+    students_count: '24 طالباً',
+    active_homeworks_count: 3,
+    scheduled_exams_count: 2,
+    room_name: 'قاعة 4 (الجناح الشرقي)'
+  },
+  {
+    id: 2,
+    name: 'ب5',
+    grade_name: 'الصف الخامس',
+    subject_name: 'الرياضيات',
+    students_count: '22 طالباً',
+    active_homeworks_count: 2,
+    scheduled_exams_count: 1,
+    room_name: 'قاعة 5 (الجناح الشرقي)'
+  },
+  {
+    id: 3,
+    name: 'أ6',
+    grade_name: 'الصف السادس',
+    subject_name: 'الرياضيات',
+    students_count: '23 طالباً',
+    active_homeworks_count: 2,
+    scheduled_exams_count: 1,
+    room_name: 'قاعة 8 (الجناح الشمالي)'
   }
 ]);
 </script>
