@@ -89,6 +89,20 @@
             </div>
             <div class="active-check-icon" v-if="selectedRole === 'ADMIN'">✓</div>
           </div>
+
+          <!-- Shared Components Role -->
+          <div 
+            class="role-card" 
+            :class="{ active: selectedRole === 'SHARED' }"
+            @click="selectRole('SHARED')"
+          >
+            <div class="role-icon-box shared">🧩</div>
+            <div class="role-info">
+              <h3 class="role-name">المكونات المشتركة (Shared)</h3>
+              <span class="role-desc">عناصر UI موحدة وقابلة لإعادة الاستخدام</span>
+            </div>
+            <div class="active-check-icon" v-if="selectedRole === 'SHARED'">✓</div>
+          </div>
         </div>
       </section>
 
@@ -162,7 +176,7 @@
         <div class="file-path-banner">
           <div class="path-info">
             <span class="path-label">📂 ملف المكون المرجعي:</span>
-            <code class="path-code">Views-api/{{ selectedRole.toLowerCase() }}/{{ selectedPage }}/{{ currentComponentObj?.file || '' }}</code>
+            <code class="path-code">{{ selectedRole === 'SHARED' ? `Views-api/shared/${currentComponentObj?.file || ''}` : `Views-api/${selectedRole.toLowerCase()}/${selectedPage}/${currentComponentObj?.file || ''}` }}</code>
           </div>
           <span class="path-desc">{{ currentComponentObj?.desc || '' }}</span>
         </div>
@@ -220,6 +234,16 @@
                 :currentCount="3"
                 :upcomingCount="3"
                 :archiveCount="1"
+                userName="أحمد خالد المصراتي"
+                userSubtitle="الصف الخامس - الشعبة (أ5)"
+                userTag="قسم المرحلة الإعدادية والنموذجية"
+                avatarIcon="🏫"
+                themeGradient="purple"
+                :stats="[
+                  { id: 'subjects', label: 'المواد الدراسية', value: 7, color: '#7c3aed', icon: 'book', route: '/student/subjects' },
+                  { id: 'homeworks', label: 'الواجبات المعلقة', value: 4, color: '#ea580c', icon: 'homework', route: '/student/homeworks' },
+                  { id: 'exams', label: 'الامتحانات القادمة', value: 1, color: '#2563eb', icon: 'exam', route: '/student/exams' }
+                ]"
               />
             </div>
 
@@ -277,6 +301,10 @@ import TeacherScheduleHeader from '@views-api/teacher/schedule/TeacherScheduleHe
 import TeacherScheduleTabs from '@views-api/teacher/schedule/TeacherScheduleTabs.vue';
 import TeacherScheduleList from '@views-api/teacher/schedule/TeacherScheduleList.vue';
 
+// Import Shared Components
+import AppMainHeader from '@views-api/shared/AppMainHeader.vue';
+import AppSubHeader from '@views-api/shared/AppSubHeader.vue';
+
 // Component Instance Mapping Table
 const componentInstances = {
   HomeworkHeader,
@@ -308,7 +336,9 @@ const componentInstances = {
   TeacherSubjectList,
   TeacherScheduleHeader,
   TeacherScheduleTabs,
-  TeacherScheduleList
+  TeacherScheduleList,
+  AppMainHeader,
+  AppSubHeader
 };
 
 // Selection & Theme State
@@ -432,6 +462,17 @@ const rolePagesMap = {
       icon: '🏫',
       components: [
         { id: 'DashboardHeader', name: 'هيدر نظام الإدارة (DashboardHeader)', file: 'DashboardHeader.vue', desc: 'المؤشرات العامة للمدرسة والطلاب والكادر' }
+      ]
+    }
+  ],
+  SHARED: [
+    {
+      id: 'headers',
+      name: 'الهيدرات المشتركة (Headers)',
+      icon: '📱',
+      components: [
+        { id: 'AppMainHeader', name: 'الهيدر الرئيسي الموحد (AppMainHeader)', file: 'AppMainHeader.vue', desc: 'هيدر رئيسي موحد متعدد الاستخدامات لكافة أدوار وصفحات المنظومة مع كارت البروفايل والعدادات القابلة للتخصيص الكامل' },
+        { id: 'AppSubHeader', name: 'هيدر الصفحات الفرعية (AppSubHeader)', file: 'AppSubHeader.vue', desc: 'هيدر موحد للصفحات الداخلية مع زر الرجوع، عنوان الصفحة، زر التصفية، وكارت الهيرو مع مجسم 3D' }
       ]
     }
   ]
@@ -1032,6 +1073,11 @@ const mockTeacherSubjects = ref([
 .role-icon-box.admin {
   background: rgba(14, 165, 233, 0.2);
   border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.role-icon-box.shared {
+  background: rgba(236, 72, 153, 0.2);
+  border: 1px solid rgba(236, 72, 153, 0.3);
 }
 
 .role-info {
