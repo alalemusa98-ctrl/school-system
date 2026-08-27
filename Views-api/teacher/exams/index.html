@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام إدارة المدرسة - جدول الامتحانات (المعلم)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'SF Arabic';
+      src: url('../fonts/SF-Arabic-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'SF Arabic';
+      src: url('../fonts/SF-Arabic-SemiBold.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    :root {
+      --font-family: 'SF Arabic', 'Alexandria', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg-primary: #f8fafc;
+      --color-primary: #4f46e5;
+      --color-purple: #7c3aed;
+      --color-slate-900: #0f172a;
+      --color-slate-800: #1e293b;
+      --color-slate-500: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: #090d16;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .mobile-wrapper {
+      width: 100%;
+      max-width: 412px;
+      height: 890px;
+      background: #f8fafc;
+      border-radius: 46px;
+      border: 10px solid #1e293b;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-wrapper::-webkit-scrollbar { display: none; }
+
+    /* iOS Header Banner */
+    .ios-header { position: relative; margin-bottom: 24px; }
+    .ios-header-banner {
+      background: linear-gradient(180deg, rgba(109, 40, 217, 0.78) 0%, rgba(91, 33, 182, 0.92) 100%), url('images/student_bg.jpg') center center / cover no-repeat;
+      padding: 12px 18px 75px;
+      border-radius: 0 0 36px 36px;
+      color: #ffffff;
+      box-shadow: 0 12px 32px rgba(91, 33, 182, 0.3);
+      position: relative;
+    }
+    .ios-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .dynamic-island {
+      width: 90px;
+      height: 20px;
+      background-color: #0f172a;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 8px;
+    }
+    .camera-lens { width: 6px; height: 6px; background: #1e293b; border-radius: 50%; border: 1px solid #334155; }
+    .ios-icons { display: flex; gap: 6px; align-items: center; }
+
+    .exam-nav-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .exam-page-title { font-size: 20px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); color: #ffffff; }
+    .nav-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-icon-btn:hover { background: rgba(255, 255, 255, 0.35); transform: scale(1.05); }
+
+    /* Floating Overlapping Hero Card */
+    .ios-hero-card {
+      position: relative;
+      margin: -55px 16px 0;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 20px 45px -10px rgba(91, 33, 182, 0.22), 0 4px 16px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      z-index: 10;
+    }
+    .hero-text-content { display: flex; flex-direction: column; gap: 6px; }
+    .hero-main-title { font-size: 17px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.3; }
+    .hero-class-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: #5b21b6;
+      background: #ede9fe;
+      padding: 4px 12px;
+      border-radius: 12px;
+      width: fit-content;
+    }
+    .hero-term-text { font-size: 12px; color: #64748b; font-weight: 600; }
+    .hero-3d-box {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 8px 18px rgba(109, 40, 217, 0.18);
+      border: 2.5px solid #ffffff;
+      padding: 4px;
+    }
+    .exams-3d-img { width: 100%; height: 100%; object-fit: contain; }
+    .status-indicator-dot {
+      width: 12px;
+      height: 12px;
+      background-color: #22c55e;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      bottom: -2px;
+      left: -2px;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    }
+
+    /* Tabs & Filters */
+    .hw-filter-section { padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 14px; }
+    .hw-segmented-control {
+      background: #f1f5f9;
+      border-radius: 18px;
+      padding: 4px;
+      display: flex;
+      gap: 4px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+    .hw-tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hw-tab-btn.active { background: #ffffff; color: #4f46e5; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); }
+    .hw-count-badge {
+      background-color: #ef4444;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hw-create-action-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.28);
+      transition: all 0.2s ease;
+    }
+    .hw-create-action-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(79, 70, 229, 0.38); }
+    .create-btn-icon { width: 32px; height: 32px; border-radius: 10px; background: rgba(255, 255, 255, 0.22); display: flex; align-items: center; justify-content: center; }
+    .create-btn-label { font-size: 14px; font-weight: 800; }
+    .create-btn-tag { background: rgba(255, 255, 255, 0.25); font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 8px; }
+
+    .subject-pills-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .subject-pills-row::-webkit-scrollbar { display: none; }
+    .sub-pill {
+      min-width: 80px;
+      padding: 10px 12px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .sub-pill.active {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.3);
+      transform: translateY(-2px);
+    }
+    .sub-pill-icon-top { font-size: 22px; line-height: 1; }
+    .sub-pill-name { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .sub-pill.active .sub-pill-name { color: #ffffff; }
+
+    /* Grouped Cards (Student Reference) */
+    .hw-container { padding: 16px; }
+    .schedule-days-list { display: flex; flex-direction: column; gap: 24px; }
+    .sched-ref-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px 20px 16px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      border: 1px solid #f1f5f9;
+    }
+    .sched-ref-top-notch {
+      width: 54px;
+      height: 54px;
+      background: linear-gradient(352deg, #4f46e59e 0%, #c7d2feb3 100%);
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 8px solid #fff;
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.35) inset;
+    }
+    .sched-ref-header-info { text-align: center; margin-bottom: 16px; }
+    .sched-ref-day-title { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; }
+    .exam-ref-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 16px; }
+    .sched-subject-squircle {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sched-subject-squircle:hover {
+      transform: translateY(-3px);
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border-color: #c7d2fe;
+    }
+    .sched-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .sched-icon-box.math { background: #ede9fe; color: #7c3aed; }
+    .sched-icon-box.science { background: #e0f2fe; color: #0284c7; }
+    .sched-icon-box.arabic { background: #fef3c7; color: #d97706; }
+    .sched-icon-box.islamic { background: #dcfce7; color: #16a34a; }
+    .subject-3d-icon-render { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+    .sched-period-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .sched-period-tag.pending { background: #ffedd5; color: #c2410c; }
+    .sched-subject-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 2px 0 0;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .sched-teacher-name {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .sched-ref-footer-date {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* Drawer & Modals */
+    .drawer-backdrop, .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .modal-backdrop { align-items: center; padding: 16px; }
+    .drawer-content {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 28px 28px 0 0;
+      padding: 16px 20px 28px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    }
+    .drawer-handle { width: 40px; height: 4px; background: #cbd5e1; border-radius: 2px; margin: 0 auto 16px; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .drawer-subject-pill { padding: 4px 10px; border-radius: 10px; font-size: 11.5px; font-weight: 700; }
+    .drawer-subject-pill.math { background: #ede9fe; color: #7c3aed; }
+    .drawer-subject-pill.science { background: #e0f2fe; color: #0284c7; }
+    .drawer-subject-pill.arabic { background: #fef3c7; color: #d97706; }
+    .drawer-subject-pill.islamic { background: #dcfce7; color: #16a34a; }
+    .drawer-section-pill { background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 10px; font-size: 11.5px; margin-right: 6px; font-weight: 600; }
+    .drawer-close-btn, .modal-close-btn { background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; color: #64748b; }
+    .drawer-title { font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+    .drawer-meta-row { display: flex; gap: 16px; background: #f8fafc; padding: 10px 14px; border-radius: 14px; margin-bottom: 16px; font-size: 12px; }
+    .meta-item { display: flex; gap: 4px; }
+    .meta-label { color: #64748b; }
+    .meta-value { font-weight: 700; color: #1e1b4b; }
+    .block-heading { font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    .drawer-desc { font-size: 13px; line-height: 1.6; color: #475569; background: #f8fafc; padding: 12px; border-radius: 14px; margin-bottom: 16px; }
+    .drawer-solution-card { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; padding: 14px; border-radius: 16px; margin-bottom: 20px; }
+    .sol-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .sol-badge { font-size: 12px; font-weight: 800; color: #166534; }
+    .sol-view-btn { background: #16a34a; color: #ffffff; border: none; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .sol-preview-text { font-size: 12px; color: #15803d; line-height: 1.5; white-space: pre-wrap; }
+    .btn-delete-action { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 12px; border-radius: 14px; font-size: 13.5px; font-weight: 700; cursor: pointer; }
+
+    /* Modal */
+    .modal-dialog { width: 100%; max-width: 440px; background: #ffffff; border-radius: 24px; padding: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-title { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; }
+    .modal-form { display: flex; flex-direction: column; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .form-label { font-size: 12px; font-weight: 700; color: #334155; }
+    .req { color: #ef4444; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 12.5px; font-family: inherit; }
+    .solution-toggle-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px; margin-top: 4px; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; }
+    .toggle-text strong { font-size: 12.5px; color: #1e1b4b; }
+    .toggle-text p { font-size: 11px; color: #64748b; margin: 2px 0 0; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: #10b981; }
+    input:checked + .slider:before { transform: translateX(20px); }
+    .toggle-expand { margin-top: 10px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-cancel { flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 14px; font-weight: 700; cursor: pointer; }
+    .btn-submit { flex: 2; background: #6366f1; color: #ffffff; border: none; padding: 12px; border-radius: 14px; font-weight: 700; cursor: pointer; }
+    .btn-primary-close { width: 100%; background: #6366f1; color: #ffffff; border: none; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+    .solution-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 14px; margin-bottom: 14px; }
+    .solution-content { font-family: inherit; font-size: 13px; line-height: 1.6; color: #166534; white-space: pre-wrap; margin: 0; }
+  </style>
+</head>
+<body>
+  <div id="app" class="mobile-wrapper">
+    <!-- Header -->
+    <header class="ios-header">
+      <div class="ios-header-banner">
+        <div class="ios-status-bar">
+          <span>9:41</span>
+          <div class="dynamic-island"><span class="camera-lens"></span></div>
+          <div class="ios-icons">
+            <svg width="18" height="11" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="0.5" /><rect x="5" y="6" width="3" height="6" rx="0.5" /><rect x="10" y="3" width="3" height="9" rx="0.5" /><rect x="15" y="0" width="3" height="12" rx="0.5" /></svg>
+            <svg width="14" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.5 3 3.7 4.9 1 8l2.5 3C5.7 8.6 8.7 7 12 7s6.3 1.6 8.5 4L23 8c-2.7-3.1-6.5-5-11-5zm0 6c-3.1 0-5.8 1.3-7.7 3.4l2.5 3C8.2 13.9 10 13 12 13s3.8.9 5.2 2.4l2.5-3C17.8 10.3 15.1 9 12 9zm0 6c-1.4 0-2.6.6-3.5 1.6L12 20l3.5-3.4C14.6 15.6 13.4 15 12 15z" /></svg>
+            <svg width="20" height="11" viewBox="0 0 24 12" fill="currentColor"><rect x="1" y="1" width="19" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" /><rect x="3" y="3" width="13" height="6" rx="1" /><path d="M22 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+          </div>
+        </div>
+
+        <div class="exam-nav-bar">
+          <button class="nav-icon-btn" @click="goHome" title="الرجوع">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <h1 class="exam-page-title">جدول الامتحانات</h1>
+          <button class="nav-icon-btn" @click="toggleSummary" title="الإحصائيات">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Card -->
+      <div class="ios-hero-card">
+        <div class="hero-text-content">
+          <h2 class="hero-main-title">إدارة وجدولة الامتحانات</h2>
+          <div class="hero-class-badge">{{ teacherProfile.name }} • {{ teacherProfile.sectionsText }}</div>
+          <span class="hero-term-text">الفصل الدراسي الأول 2026</span>
+        </div>
+        <div class="hero-illustration-wrapper">
+          <div class="hero-3d-box">
+            <img src="images/exams_evaluations_3d.png" class="exams-3d-img" alt="امتحانات 3D" />
+            <span class="status-indicator-dot"></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Tabs & Action -->
+    <section class="hw-filter-section">
+      <div class="hw-segmented-control">
+        <button class="hw-tab-btn" :class="{ active: activeTab === 'upcoming' }" @click="activeTab = 'upcoming'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>الامتحانات القادمة</span>
+          <span class="hw-count-badge">{{ upcomingExams.length }}</span>
+        </button>
+        <button class="hw-tab-btn" :class="{ active: activeTab === 'archive' }" @click="activeTab = 'archive'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <span>النتائج والأرشيف</span>
+        </button>
+      </div>
+
+      <button class="hw-create-action-btn" @click="showCreateModal = true">
+        <div class="create-btn-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </div>
+        <span class="create-btn-label">جدولة امتحان مدرسي جديد</span>
+        <span class="create-btn-tag">مجدول</span>
+      </button>
+
+      <div class="subject-pills-row">
+        <button class="sub-pill" :class="{ active: selectedSectionId === null }" @click="selectedSectionId = null">
+          <div class="sub-pill-icon-top">🌟</div>
+          <span class="sub-pill-name">كافة الشعب</span>
+        </button>
+        <button v-for="sec in assignedSections" :key="sec.id" class="sub-pill" :class="{ active: selectedSectionId === sec.id }" @click="selectedSectionId = sec.id">
+          <div class="sub-pill-icon-top">🏫</div>
+          <span class="sub-pill-name">{{ sec.grade_name }} ({{ sec.name }})</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Exams Grouped List -->
+    <main class="hw-container">
+      <div class="schedule-days-list">
+        <article v-for="(group, gIndex) in filteredGroupedList" :key="group.dateKey" class="sched-ref-card">
+          <div class="sched-ref-top-notch">{{ gIndex + 1 }}</div>
+          <div class="sched-ref-header-info">
+            <h3 class="sched-ref-day-title">امتحانات يوم {{ group.dayName }}</h3>
+          </div>
+          <div class="exam-ref-grid">
+            <div v-for="exam in group.items" :key="exam.id" class="sched-subject-squircle" @click="selectedExam = exam">
+              <div class="sched-icon-box" :class="getSubjectColorClass(exam.subject_name)">
+                <img v-if="getSubjectImage(exam.subject_name)" :src="getSubjectImage(exam.subject_name)" class="subject-3d-icon-render" alt="" />
+                <span v-else>{{ getSubjectIcon(exam.subject_name) }}</span>
+              </div>
+              <span class="sched-period-tag" :class="{ pending: !exam.has_solution }">
+                {{ exam.has_solution ? 'تم الاعتماد ✅' : 'مجدول 📝' }}
+              </span>
+              <h4 class="sched-subject-name">{{ exam.title }}</h4>
+              <span class="sched-teacher-name">{{ exam.subject_name }} • {{ exam.section_name || exam.grade_name }}</span>
+            </div>
+          </div>
+          <div class="sched-ref-footer-date">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>تاريخ الاختبار: {{ group.formattedDate }}</span>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Details Drawer -->
+    <div v-if="selectedExam" class="drawer-backdrop" @click="selectedExam = null">
+      <div class="drawer-content" @click.stop>
+        <div class="drawer-handle"></div>
+        <div class="drawer-header">
+          <div>
+            <span class="drawer-subject-pill" :class="getSubjectColorClass(selectedExam.subject_name)">{{ selectedExam.subject_name }}</span>
+            <span class="drawer-section-pill">{{ selectedExam.grade_name }} ({{ selectedExam.section_name }})</span>
+          </div>
+          <button class="drawer-close-btn" @click="selectedExam = null">&times;</button>
+        </div>
+        <h2 class="drawer-title">{{ selectedExam.title }}</h2>
+        <div class="drawer-meta-row">
+          <div class="meta-item"><span class="meta-label">📅 التاريخ:</span><span class="meta-value">{{ selectedExam.due_date }}</span></div>
+          <div class="meta-item"><span class="meta-label">⏰ التوقيت:</span><span class="meta-value">{{ selectedExam.exam_time || '09:00 ص' }}</span></div>
+        </div>
+        <div class="block-heading">📌 مفردات الاختبار والمقرر:</div>
+        <p class="drawer-desc">{{ selectedExam.description || 'اختبار تحصيلي يشمل الوحدات المقررة في المنهج.' }}</p>
+        <div v-if="selectedExam.has_solution" class="drawer-solution-card">
+          <div class="sol-card-header">
+            <span class="sol-badge">📖 النموذج الاسترشادي والحل</span>
+            <button class="sol-view-btn" @click="solutionModalData = selectedExam">عرض الكامل ➔</button>
+          </div>
+          <p class="sol-preview-text">{{ selectedExam.solution_text }}</p>
+        </div>
+        <button class="btn-delete-action" @click="deleteExam(selectedExam.id)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>حذف الامتحان نهائياً</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div v-if="showCreateModal" class="modal-backdrop" @click="showCreateModal = false">
+      <div class="modal-dialog" @click.stop>
+        <div class="modal-header">
+          <h3 class="modal-title">➕ جدولة امتحان مدرسي جديد</h3>
+          <button class="modal-close-btn" @click="showCreateModal = false">&times;</button>
+        </div>
+        <form @submit.prevent="createExam" class="modal-form">
+          <div class="form-group">
+            <label class="form-label">عنوان الامتحان <span class="req">*</span></label>
+            <input v-model="newForm.title" type="text" placeholder="مثال: امتحان الرياضيات النصفي" class="form-input" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">الشعبة <span class="req">*</span></label>
+              <select v-model="newForm.section_id" class="form-select" required>
+                <option value="" disabled>اختر الشعبة</option>
+                <option v-for="sec in assignedSections" :key="sec.id" :value="sec.id">{{ sec.grade_name }} - {{ sec.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">تاريخ الاختبار <span class="req">*</span></label>
+              <input v-model="newForm.due_date" type="date" class="form-input" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">مفردات المنهج والتعليمات</label>
+            <textarea v-model="newForm.description" placeholder="أدخل الفصول المقررة..." class="form-textarea" rows="2"></textarea>
+          </div>
+          <div class="solution-toggle-card">
+            <div class="toggle-row">
+              <div class="toggle-text">
+                <strong>تفعيل النموذج الاسترشادي والحل</strong>
+                <p>إرفاق وتفعيل خطة الإجابة المعتمدة</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" v-model="newForm.has_solution" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div v-if="newForm.has_solution" class="toggle-expand">
+              <label class="form-label">نص النموذج وتوزيع الدرجات</label>
+              <textarea v-model="newForm.solution_text" placeholder="أدخل خطوات الحل وسلم الدرجات..." class="form-textarea" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" @click="showCreateModal = false">إلغاء</button>
+            <button type="submit" class="btn-submit">جدولة وتعميم الامتحان 🚀</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Solution Modal -->
+    <div v-if="solutionModalData" class="modal-backdrop" @click="solutionModalData = null">
+      <div class="modal-dialog" @click.stop>
+        <div class="modal-header">
+          <h3 class="modal-title">📖 النموذج الاسترشادي والحل</h3>
+          <button class="modal-close-btn" @click="solutionModalData = null">&times;</button>
+        </div>
+        <div class="solution-box">
+          <pre class="solution-content">{{ solutionModalData.solution_text }}</pre>
+        </div>
+        <button class="btn-primary-close" @click="solutionModalData = null">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const activeTab = ref('upcoming');
+        const selectedSectionId = ref(null);
+        const selectedExam = ref(null);
+        const showCreateModal = ref(false);
+        const solutionModalData = ref(null);
+
+        const teacherProfile = ref({
+          name: 'أ. أحمد سالم',
+          sectionsText: 'الصف الخامس (أ5 ، ب5) - الصف السادس (أ6)'
+        });
+
+        const assignedSections = ref([
+          { id: 1, name: 'أ5', grade_name: 'الصف الخامس' },
+          { id: 2, name: 'ب5', grade_name: 'الصف الخامس' },
+          { id: 3, name: 'أ6', grade_name: 'الصف السادس' }
+        ]);
+
+        const examsList = ref([
+          {
+            id: 301,
+            title: 'امتحان العلوم العامة النصفي',
+            description: 'اختبار تحصيلي يشمل فصول الفيزياء والكيمياء والمفاهيم الأساسية.',
+            subject_name: 'العلوم العامة',
+            section_id: 1,
+            section_name: 'أ5',
+            grade_name: 'الصف الخامس',
+            due_date: '2026-08-30',
+            exam_time: '09:00 ص - 10:30 ص',
+            has_solution: 1,
+            solution_text: 'النموذج الاسترشادي:\nالسؤال الأول: (أ) تعريف الخلية، (ب) علل لما يأتي.\nتوزيع الدرجات: 20 درجة.',
+            is_archived: 0
+          },
+          {
+            id: 302,
+            title: 'امتحان الرياضيات الشهري الأول',
+            description: 'يشمل وحدات الجبر والعمليات الحسابية والمعادلات الخطية.',
+            subject_name: 'الرياضيات',
+            section_id: 2,
+            section_name: 'ب5',
+            grade_name: 'الصف الخامس',
+            due_date: '2026-08-30',
+            exam_time: '11:00 ص - 12:30 م',
+            has_solution: 0,
+            solution_text: '',
+            is_archived: 0
+          },
+          {
+            id: 303,
+            title: 'امتحان قواعد النحو والإملاء',
+            description: 'يشمل المبتدأ والخبر وكان وأخواتها وضبط الشواهد ص 40.',
+            subject_name: 'اللغة العربية',
+            section_id: 1,
+            section_name: 'أ5',
+            grade_name: 'الصف الخامس',
+            due_date: '2026-09-02',
+            exam_time: '08:30 ص - 10:00 ص',
+            has_solution: 1,
+            solution_text: 'نموذج الإجابة:\n1. الإعراب: الطالبُ اسم كان مرفوع.\n2. الاستخراج: الجملة الاسمية.',
+            is_archived: 0
+          },
+          {
+            id: 304,
+            title: 'امتحان الرياضيات المتقدمة',
+            description: 'اختبار نصف الفصل في المصفوفات ونظم المعادلات الخطية.',
+            subject_name: 'الرياضيات',
+            section_id: 3,
+            section_name: 'أ6',
+            grade_name: 'الصف السادس',
+            due_date: '2026-09-02',
+            exam_time: '10:30 ص - 12:00 م',
+            has_solution: 1,
+            solution_text: 'خطوات الحل وسلم توزيع الدرجات: 25 درجة.',
+            is_archived: 0
+          },
+          {
+            id: 305,
+            title: 'English Midterm Exam Unit 1-4',
+            description: 'Grammar, vocabulary, reading comprehension and writing paragraph.',
+            subject_name: 'اللغة الإنجليزية',
+            section_id: 3,
+            section_name: 'أ6',
+            grade_name: 'الصف السادس',
+            due_date: '2026-09-06',
+            exam_time: '09:00 AM - 10:30 AM',
+            has_solution: 1,
+            solution_text: 'Model Answer Key:\nPart 1: A, C, B, D\nPart 2: Passive voice transformation.',
+            is_archived: 0
+          },
+          {
+            id: 306,
+            title: 'امتحان التربية الإسلامية النصفي',
+            description: 'يشمل سور القرآن الكريم المقررة وأحاديث العقيدة والفقه.',
+            subject_name: 'التربية الإسلامية',
+            section_id: 2,
+            section_name: 'ب5',
+            grade_name: 'الصف الخامس',
+            due_date: '2026-09-06',
+            exam_time: '11:00 ص - 12:30 م',
+            has_solution: 1,
+            solution_text: 'توزيع الدرجات: 30 درجة على الحفظ والفهم وأحكام التلاوة.',
+            is_archived: 0
+          },
+          {
+            id: 307,
+            title: 'امتحان نهاية الفصل التمهيدي السابق',
+            description: 'امتحان تجريبي شامل للعام الماضي.',
+            subject_name: 'الرياضيات',
+            section_id: 1,
+            section_name: 'أ5',
+            grade_name: 'الصف الخامس',
+            due_date: '2026-06-10',
+            exam_time: '09:00 ص',
+            has_solution: 1,
+            solution_text: 'نموذج الإجابة مؤرشف.',
+            is_archived: 1
+          }
+        ]);
+
+        const upcomingExams = computed(() => examsList.value.filter(e => !e.is_archived));
+        const archiveExams = computed(() => examsList.value.filter(e => e.is_archived));
+
+        const filteredList = computed(() => {
+          let list = activeTab.value === 'upcoming' ? upcomingExams.value : archiveExams.value;
+          if (selectedSectionId.value !== null) {
+            list = list.filter(e => e.section_id === selectedSectionId.value);
+          }
+          return list;
+        });
+
+        const filteredGroupedList = computed(() => {
+          const groups = {};
+          filteredList.value.forEach((exam) => {
+            const key = exam.due_date;
+            if (!groups[key]) {
+              const dateObj = new Date(exam.due_date);
+              const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+              const dayName = isNaN(dateObj) ? 'المحدد' : days[dateObj.getDay()];
+              groups[key] = {
+                dateKey: key,
+                dayName,
+                formattedDate: exam.due_date,
+                items: []
+              };
+            }
+            groups[key].items.push(exam);
+          });
+          return Object.values(groups);
+        });
+
+        const newForm = ref({
+          title: '',
+          section_id: '',
+          due_date: '2026-09-10',
+          description: '',
+          has_solution: false,
+          solution_text: ''
+        });
+
+        const createExam = () => {
+          const sec = assignedSections.value.find(s => s.id === newForm.value.section_id);
+          const newId = Date.now();
+          examsList.value.unshift({
+            id: newId,
+            title: newForm.value.title,
+            description: newForm.value.description,
+            subject_name: 'الرياضيات',
+            section_id: newForm.value.section_id,
+            section_name: sec ? sec.name : 'أ5',
+            grade_name: sec ? sec.grade_name : 'الصف الخامس',
+            due_date: newForm.value.due_date,
+            exam_time: '09:00 ص - 10:30 ص',
+            has_solution: newForm.value.has_solution ? 1 : 0,
+            solution_text: newForm.value.solution_text,
+            is_archived: 0
+          });
+
+          showCreateModal.value = false;
+          newForm.value = {
+            title: '',
+            section_id: '',
+            due_date: '2026-09-10',
+            description: '',
+            has_solution: false,
+            solution_text: ''
+          };
+          alert('تمت جدولة وتعميم الامتحان بنجاح! 🚀');
+        };
+
+        const deleteExam = (id) => {
+          if (confirm('هل أنت متأكد من رغبتك في حذف هذا الامتحان نهائياً؟')) {
+            examsList.value = examsList.value.filter(e => e.id !== id);
+            selectedExam.value = null;
+          }
+        };
+
+        const getSubjectColorClass = (name) => {
+          if (!name) return 'default';
+          if (name.includes('رياضيات')) return 'math';
+          if (name.includes('علوم')) return 'science';
+          if (name.includes('عرب')) return 'arabic';
+          if (name.includes('إسلام')) return 'islamic';
+          return 'default';
+        };
+
+        const getSubjectImage = (name) => {
+          if (!name) return null;
+          if (name.includes('رياضيات')) return 'images/math_3d.jpg';
+          if (name.includes('علوم')) return 'images/science_3d.jpg';
+          if (name.includes('إنجليز')) return 'images/english_3d.jpg';
+          if (name.includes('إسلام')) return 'images/islamic_3d.jpg';
+          return null;
+        };
+
+        const getSubjectIcon = (name) => {
+          if (!name) return '📝';
+          if (name.includes('رياضيات')) return '📐';
+          if (name.includes('علوم')) return '🔬';
+          if (name.includes('عرب')) return '📖';
+          if (name.includes('إنجليزي')) return '🔤';
+          if (name.includes('إسلام')) return '🕌';
+          return '📝';
+        };
+
+        const goHome = () => {
+          alert('التوجيه إلى لوحة تحكم المعلم (/teacher)');
+        };
+
+        const toggleSummary = () => {
+          alert(`إجمالي الامتحانات: ${examsList.value.length}`);
+        };
+
+        return {
+          activeTab,
+          selectedSectionId,
+          selectedExam,
+          showCreateModal,
+          solutionModalData,
+          teacherProfile,
+          assignedSections,
+          upcomingExams,
+          archiveExams,
+          filteredGroupedList,
+          newForm,
+          createExam,
+          deleteExam,
+          getSubjectColorClass,
+          getSubjectImage,
+          getSubjectIcon,
+          goHome,
+          toggleSummary
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

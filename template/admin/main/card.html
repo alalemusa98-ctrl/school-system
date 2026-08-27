@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بطاقة إحصائيات 3D - حضور وغياب الطلاب</title>
+  
+  <!-- Apple SF Arabic WebFont CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mrbubbles/sf-arabic-font@master/SF-Arabic.css">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
+
+  <style>
+    /* Global Reset & Typography */
+    *, body, html {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      direction: rtl;
+    }
+
+    /* ===== 3D STATISTIC CARD COMPONENT ===== */
+    .card-3d-wrapper {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .card-3d-box {
+      background: linear-gradient(180deg, #f7fdf9 0%, #ffffff 60%);
+      border-radius: 24px;
+      padding: 22px 24px 20px 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.02);
+      border: 1px solid rgba(52, 199, 89, 0.22);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-3d-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+      border-color: rgba(52, 199, 89, 0.35);
+    }
+
+    /* Card Header */
+    .card-3d-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .card-3d-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .card-3d-icon-pill {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #dcfce7;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .card-3d-box:hover .card-3d-icon-pill {
+      transform: scale(1.05);
+    }
+
+    /* Card Body & 3D Render */
+    .card-3d-body {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 110px;
+      margin: 12px 0 16px 0;
+      width: 100%;
+    }
+
+    .card-3d-stats {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: right;
+      z-index: 2;
+    }
+
+    .card-3d-num {
+      font-size: 38px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .card-3d-unit {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .card-3d-img-container {
+      position: relative;
+      width: 110px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-3d-render-img {
+      width: 135px;
+      height: 135px;
+      object-fit: contain;
+      z-index: 2;
+      filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-3d-box:hover .card-3d-render-img {
+      transform: scale(1.06) translateY(-2px);
+    }
+
+    .card-3d-shadow-ellipse {
+      position: absolute;
+      bottom: 4px;
+      width: 72px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(52, 199, 89, 0.28);
+      filter: blur(4px);
+      z-index: 1;
+    }
+
+    /* Progress Bar Track */
+    .card-3d-progress-track {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 100px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+
+    .card-3d-progress-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, #34c759 0%, #30d158 100%);
+      transition: width 0.4s ease;
+    }
+
+    /* Card Footer */
+    .card-3d-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      width: 100%;
+    }
+
+    .badge-status-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-status-dot.green {
+      color: #15803d;
+    }
+
+    .badge-status-dot.red {
+      color: #b91c1c;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.green {
+      background: #34c759;
+      box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.2);
+    }
+
+    .dot.red {
+      background: #ff3b30;
+      box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Single 3D Stat Card Component Wrapper -->
+  <div class="card-3d-wrapper">
+    <div class="card-3d-box student-theme">
+      
+      <!-- Card Header -->
+      <div class="card-3d-header">
+        <h4 class="card-3d-title">حضور وغياب الطلاب</h4>
+        <div class="card-3d-icon-pill emerald">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-3d-body">
+        <div class="card-3d-stats">
+          <div class="card-3d-num">2,2</div>
+          <div class="card-3d-unit">طالب</div>
+        </div>
+        <div class="card-3d-img-container">
+          <img src="./assets/student_attendance_3d.png" alt="حضور وغياب الطلاب" class="card-3d-render-img" />
+          <div class="card-3d-shadow-ellipse"></div>
+        </div>
+      </div>
+
+      <!-- Progress Track -->
+      <div class="card-3d-progress-track">
+        <div class="card-3d-progress-fill" style="width: 100%;"></div>
+      </div>
+
+      <!-- Card Footer -->
+      <div class="card-3d-footer">
+        <span class="badge-status-dot green">
+          <span class="dot green"></span> الحضور 2
+        </span>
+        <span class="badge-status-dot red">
+          <span class="dot red"></span> الغياب 0
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

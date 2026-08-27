@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل الشعبة والجدول الدراسي - ClassDetailsPanel</title>
+  
+  <!-- Apple SF Arabic WebFont CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mrbubbles/sf-arabic-font@master/SF-Arabic.css">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
+
+  <style>
+    /* Global Reset & Typography */
+    *, body, html {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      direction: rtl;
+    }
+
+    /* ===== CLASS DETAILS PANEL CONTAINER ===== */
+    .panel-container {
+      width: 100%;
+      max-width: 1060px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Top Navigation & Header Row */
+    .top-nav-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .top-right-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .back-nav-btn {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      transition: all 0.18s ease;
+      outline: none;
+      user-select: none;
+    }
+
+    .back-nav-btn:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: translateX(2px);
+    }
+
+    .top-page-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .top-page-sub {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Top Status Pills */
+    .top-status-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill-blue {
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 12.5px;
+      font-weight: 800;
+      padding: 8px 18px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Tabs Bar Row */
+    .tabs-bar-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab-btn {
+      background: #ffffff;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .nav-tab-btn:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+
+    .nav-tab-btn.active {
+      background: #eef2ff;
+      color: #4338ca;
+      border-color: #c7d2fe;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(67, 56, 202, 0.08);
+    }
+
+    .nav-tab-btn svg {
+      flex-shrink: 0;
+    }
+
+    /* Timetable Grid Component */
+    .timetable-wrapper {
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .timetable-grid {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: center;
+    }
+
+    .timetable-grid th {
+      background: #f8fafc;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 16px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      border-left: 1px solid #f1f5f9;
+    }
+
+    .timetable-grid th:last-child {
+      border-left: none;
+    }
+
+    .timetable-grid td.day-cell-header {
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      border-left: 1px solid #e2e8f0;
+      width: 130px;
+      vertical-align: middle;
+    }
+
+    .timetable-grid td.slot-cell {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f1f5f9;
+      border-left: 1px solid #f1f5f9;
+      vertical-align: middle;
+      background: #ffffff;
+    }
+
+    .timetable-grid td.slot-cell:last-child {
+      border-left: none;
+    }
+
+    .timetable-grid tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Lesson Dashed Box */
+    .lesson-box {
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-height: 64px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lesson-box:hover {
+      border-color: #6366f1;
+      background: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+    }
+
+    .subject-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #4338ca;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .teacher-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      margin: 0;
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ClassDetailsPanel Container -->
+  <div class="panel-container">
+    
+    <!-- Top Navigation & Header Row -->
+    <div class="top-nav-row">
+      <div class="top-right-group">
+        <button class="back-nav-btn" onclick="alert('العودة لصفحة الفصول الدراسية')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>العودة لصفحة الفصول الدراسية</span>
+        </button>
+
+        <h2 class="top-page-title">
+          <span>تفاصيل الشعبة 5أ</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/></svg>
+        </h2>
+        <p class="top-page-sub">الصف الدراسي: الصف الخامس</p>
+      </div>
+
+      <!-- Status Pills -->
+      <div class="top-status-pills">
+        <span class="status-pill-blue">5 حصص يومياً</span>
+        <span class="status-pill-blue">شعبة مفعلة ونشطة</span>
+      </div>
+    </div>
+
+    <!-- Tabs Bar Row -->
+    <div class="tabs-bar-row">
+      <button class="nav-tab-btn active" onclick="switchTab('schedule', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>الجدول الأسبوعي لشعبة 5أ (من الأحد إلى الخميس - 6 حصص يومياً)</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('students', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>الطلاب المسجلون (1)</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('teachers', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>المعلمون المكلفون (6)</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchTab('default', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>الجدول الدراسي (الافتراضية)</span>
+      </button>
+    </div>
+
+    <!-- Tab 1: Timetable Grid -->
+    <div id="tab-schedule" class="tab-pane active">
+      <div class="timetable-wrapper">
+        <table class="timetable-grid">
+          <thead>
+            <tr>
+              <th style="width: 130px;">اليوم / الحصص</th>
+              <th>الحصة 1</th>
+              <th>الحصة 2</th>
+              <th>الحصة 3</th>
+              <th>الحصة 4</th>
+              <th>الحصة 5</th>
+              <th>الحصة 6</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Sunday -->
+            <tr>
+              <td class="day-cell-header">الأحد</td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الرياضيات</span>
+                  <span class="teacher-name">أ. أحمد خالد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">العلوم العامة</span>
+                  <span class="teacher-name">أ. محمد طارق</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة العربية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة الإنجليزية</span>
+                  <span class="teacher-name">أ. عمر السيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">التربية الإسلامية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الحاسوب</span>
+                  <span class="teacher-name">أ. علي الحسن</span>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Monday -->
+            <tr>
+              <td class="day-cell-header">الإثنين</td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة الإنجليزية</span>
+                  <span class="teacher-name">أ. عمر السيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الرياضيات</span>
+                  <span class="teacher-name">أ. أحمد خالد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">التربية الإسلامية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">العلوم العامة</span>
+                  <span class="teacher-name">أ. محمد طارق</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الدراسات الاجتماعية</span>
+                  <span class="teacher-name">أ. خالد سعيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">التربية البدنية</span>
+                  <span class="teacher-name">أ. محمود طه</span>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Tuesday -->
+            <tr>
+              <td class="day-cell-header">الثلاثاء</td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">العلوم العامة</span>
+                  <span class="teacher-name">أ. محمد طارق</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الحاسوب</span>
+                  <span class="teacher-name">أ. علي الحسن</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الرياضيات</span>
+                  <span class="teacher-name">أ. أحمد خالد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة العربية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة الإنجليزية</span>
+                  <span class="teacher-name">أ. عمر السيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">التربية الفنية</span>
+                  <span class="teacher-name">أ. سعاد النجار</span>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Wednesday -->
+            <tr>
+              <td class="day-cell-header">الأربعاء</td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة العربية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة الإنجليزية</span>
+                  <span class="teacher-name">أ. عمر السيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الدراسات الاجتماعية</span>
+                  <span class="teacher-name">أ. خالد سعيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الرياضيات</span>
+                  <span class="teacher-name">أ. أحمد خالد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">العلوم العامة</span>
+                  <span class="teacher-name">أ. محمد طارق</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">التربية الإسلامية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Thursday -->
+            <tr>
+              <td class="day-cell-header">الخميس</td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الرياضيات</span>
+                  <span class="teacher-name">أ. أحمد خالد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">العلوم العامة</span>
+                  <span class="teacher-name">أ. محمد طارق</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة العربية</span>
+                  <span class="teacher-name">أ. سالم الفيتوري</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">اللغة الإنجليزية</span>
+                  <span class="teacher-name">أ. عمر السيد</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">الحاسوب</span>
+                  <span class="teacher-name">أ. علي الحسن</span>
+                </div>
+              </td>
+              <td class="slot-cell">
+                <div class="lesson-box">
+                  <span class="subject-title">نشاط حر</span>
+                  <span class="teacher-name">أستاذ المادة</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 2: Registered Students -->
+    <div id="tab-students" class="tab-pane">
+      <div style="padding: 30px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 18px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">قائمة الطلاب المسجلين بـ الشعبة 5أ (1 طالب)</h3>
+        <p style="margin-top: 8px; font-size: 13px;">أحمد خالد (رقم القيد: 101 - كود الطالب: ST1001)</p>
+      </div>
+    </div>
+
+    <!-- Tab 3: Assigned Teachers -->
+    <div id="tab-teachers" class="tab-pane">
+      <div style="padding: 30px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 18px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">قائمة المعلمين المكلفين بـ الشعبة 5أ (6 معلمين)</h3>
+        <p style="margin-top: 8px; font-size: 13px;">أ. أحمد خالد • أ. محمد طارق • أ. سالم الفيتوري • أ. عمر السيد • أ. علي الحسن • أ. خالد سعيد</p>
+      </div>
+    </div>
+
+    <!-- Tab 4: Default Schedule -->
+    <div id="tab-default" class="tab-pane">
+      <div style="padding: 30px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 18px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">إعدادات الجدول الافتراضي لشعبة 5أ</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+    }
+  </script>
+</body>
+</html>
