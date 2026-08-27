@@ -194,7 +194,36 @@
 
             <!-- Dynamic Live Rendered Vue Component -->
             <div class="live-component-wrapper">
+              <!-- Special Separate Renderers for AppTabs Variants -->
+              <div v-if="selectedComponent === 'AppTabsStudent'" class="app-tabs-preview-wrap">
+                <AppTabs 
+                  :tabs="[
+                    { id: 'current', label: 'الواجبات الحالية', badge: 4 },
+                    { id: 'previous', label: 'الأرشيف' }
+                  ]"
+                  activeTab="current"
+                />
+              </div>
+
+              <div v-else-if="selectedComponent === 'AppTabsTeacher'" class="app-tabs-preview-wrap">
+                <AppTabs 
+                  :tabs="[
+                    { id: 'current', label: 'الواجبات الحالية', badge: 4 },
+                    { id: 'archive', label: 'الأرشيف', badge: 2 }
+                  ]"
+                  actionButtonText="إضافة واجب جديد"
+                  activeTab="current"
+                  :pills="[
+                    { id: null, name: 'كافة الشعب', icon: '🌟' },
+                    { id: 1, name: 'أ5', grade_name: 'الصف الخامس', icon: '🏫' },
+                    { id: 2, name: 'ب5', grade_name: 'الصف الخامس', icon: '🏫' }
+                  ]"
+                />
+              </div>
+
+              <!-- General Vue Component Renderer -->
               <component 
+                v-else
                 :is="activeComponentInstance" 
                 currentTime="9:41"
                 schoolName="مدرسة النور الإعدادية"
@@ -315,6 +344,8 @@ import TeacherScheduleList from '@views-api/teacher/schedule/TeacherScheduleList
 import AppMainHeader from '@views-api/shared/AppMainHeader.vue';
 import AppSubHeader from '@views-api/shared/AppSubHeader.vue';
 import AppGroupCard from '@views-api/shared/AppGroupCard.vue';
+import AppDashboardCards from '@views-api/shared/AppDashboardCards.vue';
+import AppTabs from '@views-api/shared/AppTabs.vue';
 
 // Component Instance Mapping Table
 const componentInstances = {
@@ -350,7 +381,11 @@ const componentInstances = {
   TeacherScheduleList,
   AppMainHeader,
   AppSubHeader,
-  AppGroupCard
+  AppGroupCard,
+  AppDashboardCards,
+  AppTabs,
+  AppTabsStudent: AppTabs,
+  AppTabsTeacher: AppTabs
 };
 
 // Selection & Theme State
@@ -492,7 +527,17 @@ const rolePagesMap = {
       name: 'كروت وعناصر العرض (Cards)',
       icon: '🗂️',
       components: [
-        { id: 'AppGroupCard', name: 'كارد المجموعات والعناصر الموحد (AppGroupCard)', file: 'AppGroupCard.vue', desc: 'كارد موحد متعدد الاستخدامات (واجبات، امتحانات، مواد، فصول، وجدول أسبوعي) مع النتوء العلوي وشبكة السكويركل المتكيفة' }
+        { id: 'AppGroupCard', name: 'كارد المجموعات والعناصر الموحد (AppGroupCard)', file: 'AppGroupCard.vue', desc: 'كارد موحد متعدد الاستخدامات (واجبات، امتحانات، مواد، فصول، وجدول أسبوعي) مع النتوء العلوي وشبكة السكويركل المتكيفة' },
+        { id: 'AppDashboardCards', name: 'كروت اللوحة الرئيسية الموحدة (AppDashboardCards)', file: 'AppDashboardCards.vue', desc: 'شبكة بطاقات الملاحة السريعة 3D الموحدة للطالب والمعلم مع زبابيك البلور الزجاجي وشارات الحالة' }
+      ]
+    },
+    {
+      id: 'tabs',
+      name: 'التابات والفلترة المشتركة (Tabs & Filters)',
+      icon: '🔘',
+      components: [
+        { id: 'AppTabsStudent', name: 'شريط تابات الطالب (AppTabs - Student)', file: 'AppTabs.vue', desc: 'عرض شريط التابات والفلترة الخاص ببوابة الطالب مع كبسولات المواد 3D (بدون أزرار إنشاء)' },
+        { id: 'AppTabsTeacher', name: 'شريط تابات المعلم (AppTabs - Teacher)', file: 'AppTabs.vue', desc: 'عرض شريط التابات والفلترة الخاص ببوابة المعلم مع زر إضافة واجب جديد وشعب الفصول' }
       ]
     }
   ]
@@ -1585,6 +1630,48 @@ const mockTeacherSubjects = ref([
 .design-preview-root.light .component-render-canvas {
   background: #f1f5f9;
   border-color: #e2e8f0;
+}
+
+/* Dual AppTabs Preview Box Styles */
+.dual-app-tabs-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.variant-preview-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.4);
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.design-preview-root.light .variant-preview-box {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.variant-header-badge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 10px;
+  align-self: flex-start;
+  font-family: 'SF Arabic', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.variant-header-badge.student {
+  background: rgba(99, 102, 241, 0.18);
+  color: #818cf8;
+}
+
+.variant-header-badge.teacher {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
 }
 
 .design-preview-root.light .mobile-iphone-shell {
