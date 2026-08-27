@@ -213,8 +213,11 @@
                 ]"
                 currentDayName="الثلاثاء"
                 :groupedCurrentHomeworks="mockHomeworks"
+                :groupedUpcomingExams="mockExams"
+                :groupedResultsExams="mockArchiveExams"
                 :groupedExams="mockExams"
-                :scheduleDays="mockSchedule"
+                :scheduleSlots="mockScheduleSlots"
+                :scheduleDays="mockScheduleSlots"
                 :subjectsList="selectedRole === 'TEACHER' ? mockTeacherSubjects : mockSubjects"
                 :cardsList="mockDashboardCards"
                 activeTab="current"
@@ -244,6 +247,13 @@
                   { id: 'homeworks', label: 'الواجبات المعلقة', value: 4, color: '#ea580c', icon: 'homework', route: '/student/homeworks' },
                   { id: 'exams', label: 'الامتحانات القادمة', value: 1, color: '#2563eb', icon: 'exam', route: '/student/exams' }
                 ]"
+                :items="[
+                  { id: 1, title: 'الرياضيات', subtitle: 'أ. أحمد سالم', submitted: false, isPending: true, subject_name: 'الرياضيات' },
+                  { id: 2, title: 'التربية الإسلامية', subtitle: 'أ. محمد علي', submitted: true, subject_name: 'التربية الإسلامية' }
+                ]"
+                date="الأحد 25 أكتوبر 2026"
+                dateLabel="تاريخ التسليم"
+                :index="1"
               />
             </div>
 
@@ -304,6 +314,7 @@ import TeacherScheduleList from '@views-api/teacher/schedule/TeacherScheduleList
 // Import Shared Components
 import AppMainHeader from '@views-api/shared/AppMainHeader.vue';
 import AppSubHeader from '@views-api/shared/AppSubHeader.vue';
+import AppGroupCard from '@views-api/shared/AppGroupCard.vue';
 
 // Component Instance Mapping Table
 const componentInstances = {
@@ -338,7 +349,8 @@ const componentInstances = {
   TeacherScheduleTabs,
   TeacherScheduleList,
   AppMainHeader,
-  AppSubHeader
+  AppSubHeader,
+  AppGroupCard
 };
 
 // Selection & Theme State
@@ -474,6 +486,14 @@ const rolePagesMap = {
         { id: 'AppMainHeader', name: 'الهيدر الرئيسي الموحد (AppMainHeader)', file: 'AppMainHeader.vue', desc: 'هيدر رئيسي موحد متعدد الاستخدامات لكافة أدوار وصفحات المنظومة مع كارت البروفايل والعدادات القابلة للتخصيص الكامل' },
         { id: 'AppSubHeader', name: 'هيدر الصفحات الفرعية (AppSubHeader)', file: 'AppSubHeader.vue', desc: 'هيدر موحد للصفحات الداخلية مع زر الرجوع، عنوان الصفحة، زر التصفية، وكارت الهيرو مع مجسم 3D' }
       ]
+    },
+    {
+      id: 'cards',
+      name: 'كروت وعناصر العرض (Cards)',
+      icon: '🗂️',
+      components: [
+        { id: 'AppGroupCard', name: 'كارد المجموعات والعناصر الموحد (AppGroupCard)', file: 'AppGroupCard.vue', desc: 'كارد موحد متعدد الاستخدامات (واجبات، امتحانات، مواد، فصول، وجدول أسبوعي) مع النتوء العلوي وشبكة السكويركل المتكيفة' }
+      ]
     }
   ]
 };
@@ -559,25 +579,73 @@ const mockHomeworks = ref([
 
 const mockExams = ref([
   {
-    dateKey: '2026-08-20',
+    dateKey: '2026-08-30',
     index: 1,
-    dayName: 'الخميس',
-    dateFormatted: '20 أغسطس 2026',
+    dayName: 'الأحد',
+    dateFormatted: '30 أغسطس 2026',
     exams: [
-      { id: 1, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', exam_time: '09:00 AM', room: 'قاعة 3', total_marks: 100 },
-      { id: 2, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', exam_time: '11:00 AM', room: 'قاعة 5', total_marks: 100 }
+      { id: 1, title: 'اختبار الجبر والهندسة', subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', due_date: '30 أغسطس 2026 (08:30 ص)', room: 'القاعة الرئيسية 3', has_solution: true, description: 'يشمل اختبار نصف الفصل وحدات الأعداد والعمليات الحسابية والهندسة المستوية.' },
+      { id: 2, title: 'اختبار الكيمياء والفيزياء', subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', due_date: '30 أغسطس 2026 (10:30 ص)', room: 'مختبر العلوم 1', has_solution: false, description: 'اختبار تحصيلي في حالات المادة، الطاقة، والجدول الدوري.' }
+    ]
+  },
+  {
+    dateKey: '2026-09-02',
+    index: 2,
+    dayName: 'الثلاثاء',
+    dateFormatted: '02 سبتمبر 2026',
+    exams: [
+      { id: 3, title: 'اختبار النحو والقراءة', subject_name: 'اللغة العربية', teacher_name: 'أ. محمود طارق', due_date: '02 سبتمبر 2026 (08:30 ص)', room: 'القاعة 4', has_solution: true, description: 'قواعد الإعراب، الفاعل والمفعول به، ونصوص القراءة والتعبير.' },
+      { id: 4, title: 'English Midterm Exam', subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. سارة الحكيم', due_date: '02 سبتمبر 2026 (10:30 ص)', room: 'معمل اللغات', has_solution: true, description: 'Grammar, vocabulary, reading comprehension and writing paragraph.' }
+    ]
+  },
+  {
+    dateKey: '2026-09-04',
+    index: 3,
+    dayName: 'الخميس',
+    dateFormatted: '04 سبتمبر 2026',
+    exams: [
+      { id: 5, title: 'اختبار القرآن والحديث', subject_name: 'التربية الإسلامية', teacher_name: 'أ. عبد الله الفاسي', due_date: '04 سبتمبر 2026 (08:30 ص)', room: 'المصلى المدرسي', has_solution: true, description: 'حفظ وتفسير الآيات المقررة وأحاديث العقيدة والآداب الإسلامية.' }
     ]
   }
 ]);
 
-const mockSchedule = ref([
+const mockArchiveExams = ref([
   {
-    dayName: 'الأحد',
-    periods: [
-      { period_num: 1, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', start_time: '08:00', end_time: '08:45' },
-      { period_num: 2, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', start_time: '08:50', end_time: '09:35' }
+    dateKey: '2026-08-15',
+    index: 1,
+    dayName: 'الخميس',
+    dateFormatted: '15 أغسطس 2026',
+    exams: [
+      { id: 6, title: 'اختبار الرياضيات الشهري', subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', score: '19.5/20', due_date: '15 أغسطس 2026', room: 'القاعة 3', has_solution: true },
+      { id: 7, title: 'اختبار العلوم الشهري', subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', score: '20/20', due_date: '15 أغسطس 2026', room: 'مختبر العلوم', has_solution: true }
     ]
   }
+]);
+
+const mockScheduleSlots = ref([
+  // Day 1: Sunday (6 slots -> 2 rows of 3 columns)
+  { id: 1, day_of_week: 1, slot_number: 1, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 2, day_of_week: 1, slot_number: 2, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'مختبر العلوم' },
+  { id: 3, day_of_week: 1, slot_number: 3, subject_name: 'اللغة العربية', teacher_name: 'أ. عمر الشريف', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 4, day_of_week: 1, slot_number: 4, subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. مريم الفيتوري', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'معمل اللغات' },
+  { id: 5, day_of_week: 1, slot_number: 5, subject_name: 'التربية الإسلامية', teacher_name: 'أ. أسامة علي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'المصلى' },
+  { id: 6, day_of_week: 1, slot_number: 6, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+
+  // Day 2: Monday (6 slots -> 2 rows of 3 columns)
+  { id: 7, day_of_week: 2, slot_number: 1, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'مختبر العلوم' },
+  { id: 8, day_of_week: 2, slot_number: 2, subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. مريم الفيتوري', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'معمل اللغات' },
+  { id: 9, day_of_week: 2, slot_number: 3, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 10, day_of_week: 2, slot_number: 4, subject_name: 'التربية الإسلامية', teacher_name: 'أ. أسامة علي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'المصلى' },
+  { id: 11, day_of_week: 2, slot_number: 5, subject_name: 'اللغة العربية', teacher_name: 'أ. عمر الشريف', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 12, day_of_week: 2, slot_number: 6, subject_name: 'الحاسوب', teacher_name: 'أ. طارق محمود', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'معمل الحاسوب' },
+
+  // Day 3: Tuesday (6 slots -> 2 rows of 3 columns)
+  { id: 13, day_of_week: 3, slot_number: 1, subject_name: 'اللغة العربية', teacher_name: 'أ. عمر الشريف', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 14, day_of_week: 3, slot_number: 2, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' },
+  { id: 15, day_of_week: 3, slot_number: 3, subject_name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'مختبر العلوم' },
+  { id: 16, day_of_week: 3, slot_number: 4, subject_name: 'اللغة الإنجليزية', teacher_name: 'أ. مريم الفيتوري', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'معمل اللغات' },
+  { id: 17, day_of_week: 3, slot_number: 5, subject_name: 'التربية الإسلامية', teacher_name: 'أ. أسامة علي', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'المصلى' },
+  { id: 18, day_of_week: 3, slot_number: 6, subject_name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', grade_name: 'الصف الخامس', section_name: 'أ5', room_name: 'قاعة 4' }
 ]);
 
 const mockSubjects = ref([

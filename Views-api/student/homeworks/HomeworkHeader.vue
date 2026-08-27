@@ -15,7 +15,7 @@
 
 <script setup>
 import AppSubHeader from '../../shared/AppSubHeader.vue';
-import homeworkImg from '@/assets/homework_assignments_3d.png';
+import homeworkImg from '../../shared/assets/homework_assignments_3d.png';
 
 const props = defineProps({
   title: {

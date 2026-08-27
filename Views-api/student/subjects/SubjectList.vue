@@ -5,111 +5,52 @@
       جاري تحميل المواد الدراسية من قاعدة البيانات... ⏳
     </div>
 
-    <!-- Main Subjects Grid View -->
-    <div v-else-if="!selectedSubject">
-      <div v-if="subjectsList.length === 0" class="empty-state">
-        🎉 لا توجد مواد دراسية مضافة حالياً.
-      </div>
+    <!-- Empty State -->
+    <div v-else-if="subjectsList.length === 0" class="empty-state">
+      🎉 لا توجد مواد دراسية مضافة حالياً.
+    </div>
 
-      <div class="subjects-grid-list">
-        <article 
-          v-for="sub in subjectsList" 
-          :key="sub.id" 
-          class="subj-ref-card"
-        >
-          <!-- 1. أيقونة المادة في النتوء العلوي -->
-          <div class="subj-ref-top-notch">
-            <img v-if="getSubjectImage(sub.name)" :src="getSubjectImage(sub.name)" class="subject-3d-icon-render" alt="" />
-            <span v-else>{{ getSubjectIcon(sub.name) }}</span>
-          </div>
-
-          <!-- 2. اسم المادة والتفاصيل -->
-          <div class="subj-ref-header-info">
-            <h3 class="subj-ref-title">مادة {{ sub.name }}</h3>
-            <span class="subj-ref-subtitle">المقرر الدراسي المعتمد</span>
-          </div>
-
-          <!-- 3. كارتين عمليين: الواجبات والامتحانات -->
-          <div class="subj-ref-action-grid">
-            <!-- Card 1: الواجبات -->
-            <div 
-              class="action-squircle-card" 
-              @click="$emit('select-subject-tab', { subject: sub, tab: 'homeworks' })"
-            >
-              <div class="squircle-icon-wrapper cyan">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                </svg>
-              </div>
-              <span class="action-card-label">الواجبات</span>
-              <span class="action-card-badge cyan">تصفح الواجبات</span>
-            </div>
-
-            <!-- Card 2: الامتحانات -->
-            <div 
-              class="action-squircle-card" 
-              @click="$emit('select-subject-tab', { subject: sub, tab: 'exams' })"
-            >
-              <div class="squircle-icon-wrapper pink">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-              </div>
-              <span class="action-card-label">الامتحانات</span>
-              <span class="action-card-badge pink">تصفح الامتحانات</span>
-            </div>
-          </div>
-
-          <!-- 4. تذييل اسم المعلم -->
-          <div class="subj-ref-footer-row">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>أستاذ المادة: {{ sub.teacher_name || 'أستاذ المادة المعتمد' }}</span>
-          </div>
-        </article>
-      </div>
+    <!-- Main Subjects Grid View (Pure Declarative Calling with passed 3D Images) -->
+    <div v-else class="schedule-days-list">
+      <AppGroupCard 
+        v-for="(sub, sIdx) in subjectsList" 
+        :key="sub.id"
+        :index="sIdx + 1"
+        :title="`مادة ${sub.name}`"
+        subtitle="المقرر الدراسي المعتمد"
+        :columns="2"
+        :footerText="`أستاذ المادة: ${sub.teacher_name || 'أستاذ المادة المعتمد'}`"
+        notchGradient="linear-gradient(352deg, rgba(14, 165, 233, 0.75) 0%, rgba(186, 230, 253, 0.9) 100%)"
+        :items="[
+          { id: 'hw', title: 'الواجبات', image: hwImg, badge: 'تصفح الواجبات', badgeClass: 'none', colorClass: 'none' },
+          { id: 'ex', title: 'الامتحانات', image: examImg, badge: 'تصفح الامتحانات', badgeClass: 'none', colorClass: 'none' }
+        ]"
+        @item-click="(item) => $emit('select-subject-tab', { subject: sub, tab: item.id === 'hw' ? 'homeworks' : 'exams' })"
+      />
     </div>
   </main>
 </template>
 
 <script setup>
-import mathImg from '@/assets/math_3d.jpg';
-import scienceImg from '@/assets/science_3d.jpg';
-import englishImg from '@/assets/english_3d.jpg';
-import islamicImg from '@/assets/islamic_3d.jpg';
+import AppGroupCard from '../../shared/AppGroupCard.vue';
+import hwImg from '../../shared/assets/homework_assignments_3d.png';
+import examImg from '../../shared/assets/exams_evaluations_3d.png';
 
 const props = defineProps({
   loading: { type: Boolean, default: false },
   selectedSubject: { type: Object, default: null },
-  subjectsList: { type: Array, default: () => [] }
+  subjectsList: {
+    type: Array,
+    default: () => [
+      { id: 1, name: 'الرياضيات', teacher_name: 'أ. أحمد سالم', icon: '📐' },
+      { id: 2, name: 'العلوم العامة', teacher_name: 'أ. فاطمة العبيدي', icon: '🔬' },
+      { id: 3, name: 'اللغة الإنجليزية', teacher_name: 'أ. سارة الحكيم', icon: '🔤' },
+      { id: 4, name: 'التربية الإسلامية', teacher_name: 'أ. عبد الله الفاسي', icon: '🕌' }
+    ]
+  }
 });
 
 const emit = defineEmits(['select-subject-tab']);
-
-function getSubjectImage(name) {
-  if (!name) return null;
-  if (name.includes('رياضيات')) return mathImg || '/images/math_3d.jpg';
-  if (name.includes('علوم')) return scienceImg || '/images/science_3d.jpg';
-  if (name.includes('إنجليز')) return englishImg || '/images/english_3d.jpg';
-  if (name.includes('إسلام')) return islamicImg || '/images/islamic_3d.jpg';
-  return null;
-}
-
-function getSubjectIcon(name) {
-  if (!name) return '📖';
-  if (name.includes('عرب')) return '📖';
-  if (name.includes('حاسوب')) return '💻';
-  if (name.includes('اجتماع')) return '🌍';
-  return '📚';
-}
 </script>
 
 <style scoped>
@@ -127,149 +68,9 @@ function getSubjectIcon(name) {
   border: 1px dashed #cbd5e1;
 }
 
-.subjects-grid-list {
+.schedule-days-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.subj-ref-card {
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 24px 20px 16px;
-  position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
-}
-
-.subj-ref-top-notch {
-  width: 54px;
-  height: 54px;
-  background: linear-gradient(352deg, rgba(14, 165, 233, 0.62) 0%, rgba(186, 230, 253, 0.7) 100%);
-  color: #ffffff;
-  font-size: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 8px solid #fff;
-  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.35) inset;
-  overflow: hidden;
-}
-
-.subject-3d-icon-render {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.subj-ref-header-info {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.subj-ref-title {
-  font-size: 19px;
-  font-weight: 800;
-  color: #0f172a;
-  margin: 0;
-}
-
-.subj-ref-subtitle {
-  font-size: 12px;
-  color: #64748b;
-  font-weight: 600;
-}
-
-.subj-ref-action-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.action-squircle-card {
-  background: #f8fafc;
-  border: 1.5px solid #f1f5f9;
-  border-radius: 24px;
-  padding: 22px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.action-squircle-card:hover {
-  transform: translateY(-4px);
-  background: #ffffff;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
-}
-
-.squircle-icon-wrapper {
-  width: 58px;
-  height: 58px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
-}
-
-.squircle-icon-wrapper.cyan {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  color: #ffffff;
-  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.35);
-}
-
-.squircle-icon-wrapper.pink {
-  background: linear-gradient(135deg, #d946ef 0%, #c026d3 100%);
-  color: #ffffff;
-  box-shadow: 0 10px 22px rgba(192, 38, 211, 0.35);
-}
-
-.action-card-label {
-  font-size: 16px;
-  font-weight: 800;
-  color: #0f172a;
-  margin-top: 2px;
-}
-
-.action-card-badge {
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 14px;
-  transition: all 0.2s ease;
-}
-
-.action-card-badge.cyan {
-  background: #e0f2fe;
-  color: #0284c7;
-}
-
-.action-card-badge.pink {
-  background: #fce7f3;
-  color: #c026d3;
-}
-
-.subj-ref-footer-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding-top: 12px;
-  border-top: 1px dashed #e2e8f0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748b;
 }
 </style>
